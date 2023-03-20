@@ -1,0 +1,2 @@
+# rymi.dev
+personal website

@@ -1,5 +1,12 @@
-export default function Blog() {
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'About',
+  description: 'Data engineer.',
+};
+
+export default function About() {
   return (
-		<h1 className="text-center font-bold text-3xl">About</h1>
+		<h1 className="font-bold text-3xl">About</h1>
   )
 }

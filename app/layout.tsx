@@ -1,5 +1,7 @@
 import './globals.css'
 
+import Navbar from '../components/navbar';
+
 export const metadata = {
   title: {
     default: 'Ryan Miville',
@@ -15,7 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="bg-slate-800 text-white">
-      <body>{children}</body>
+      <body>
+        <Navbar />
+        <main>
+          {children}
+        </main>
+      </body>
     </html>
   )
 }

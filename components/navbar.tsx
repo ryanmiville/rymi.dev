@@ -43,7 +43,7 @@ export default function Navbar() {
                     className={clsx(
                       'transition-all hover:text-slate-800 dark:hover:text-slate-200 flex align-middle',
                       {
-                        'text-slate-500': !isActive,
+                        'text-slate-400': !isActive,
                         'font-bold': isActive,
                       }
                     )}
@@ -52,7 +52,7 @@ export default function Navbar() {
                       {name}
                       {path === pathname ? (
                         <motion.div
-                          className="absolute inset-0 bg-slate-100 dark:bg-slate-500 rounded-md z-[-1]"
+                          className="absolute inset-0 bg-gradient-to-tr from-slate-600 to-slate-500 rounded-md z-[-1]"
                           layoutId="sidebar"
                           transition={{
                             type: 'spring',

@@ -7,6 +7,6 @@ export const metadata: Metadata = {
 
 export default function Blog() {
   return (
-    <h1 className="font-bold text-3xl">Blog</h1>
+    <h1 className="font-extrabold text-3xl pl-20">Blog</h1>
   )
 }

@@ -23,7 +23,7 @@ export default function Nav() {
   }
 
   return (
-          <nav id="nav" className="flex justify-end px-4 text-slate-400"  >
+          <nav id="nav" className="flex justify-end py-10 px-20 text-slate-400"  >
               {Object.entries(navItems).map(([path, { name }]) => {
                 const isActive = path === pathname;
                 return (
@@ -31,14 +31,14 @@ export default function Nav() {
                     key={path}
                     href={path}
                     className={clsx(
-                      'transition-all hover:text-slate-200 text-xl px-[10px] py-[5px]',
+                      'transition-all hover:text-slate-200 text-xl p-5',
                       {
-                      'text-white' : isActive,
+                      'text-slate-200' : isActive,
                         'font-bold': isActive,
                       }
                     )}
                   >
-                    <span className={clsx({'text-white' : isActive})}>
+                    <span>
                       {name}
                     </span>
                   </Link>

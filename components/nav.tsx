@@ -23,7 +23,7 @@ export default function Nav() {
   }
 
   return (
-          <nav id="nav" className="flex justify-end py-10 px-20 text-slate-400 font-mono"  >
+          <nav id="nav" className="flex justify-end py-10 px-20 font-mono"  >
               {Object.entries(navItems).map(([path, { name }]) => {
                 const isActive = path === pathname;
                 return (
@@ -31,9 +31,9 @@ export default function Nav() {
                     key={path}
                     href={path}
                     className={clsx(
-                      'transition-all bg-clip-text text-xl p-5 text-slate-400',
+                      'transition-all bg-clip-text text-xl p-5',
                       {
-                        'hover:text-pink-200' : !isActive,
+                        ' text-slate-400 hover:text-pink-200' : !isActive,
                       },
                       {
                       'text-pink-500' : isActive,

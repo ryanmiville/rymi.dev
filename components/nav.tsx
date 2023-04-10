@@ -33,10 +33,10 @@ export default function Nav() {
                     className={clsx(
                       'transition-all bg-clip-text text-xl p-5',
                       {
-                        ' text-slate-400 hover:text-pink-200' : !isActive,
+                        ' text-slate-400 hover:text-purple-200' : !isActive,
                       },
                       {
-                      'text-pink-500' : isActive,
+                      'text-purple-400' : isActive,
                       }
                     )}
                   >

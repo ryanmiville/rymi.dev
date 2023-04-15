@@ -7,7 +7,7 @@ export const metadata = {
     default: 'Ryan Miville',
     template: '%s | Ryan Miville',
   },
-  description: 'Developer and munger of data.',
+  description: 'Web developer and data engineer.',
 }
 
 export default function RootLayout({

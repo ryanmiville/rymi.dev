@@ -1,0 +1,24 @@
+{% extends "partials/base.html" %}
+
+{% block content %}
+
+  <div class="container text-center mx-auto mt-[calc(30vh)]">
+    {% include "partials/counter.html" %}
+  </br>
+    <button
+      hx-target="#counter"
+      hx-post="/decrease"
+      class="bg-pink-700 hover:bg-pink-800 rounded-lg py-2.5 px-4"
+    >
+    -
+    </button>
+    <button
+      hx-target="#counter"
+      hx-post="/increase"
+      class="bg-pink-700 hover:bg-pink-800 rounded-lg py-2.5 px-4"
+    >
+    +
+    </button>
+  </div>
+
+{% endblock %}

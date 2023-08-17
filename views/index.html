@@ -2,23 +2,18 @@
 
 {% block content %}
 
-  <div class="container text-center mx-auto mt-[calc(30vh)]">
-    {% include "partials/counter.html" %}
-  </br>
-    <button
-      hx-target="#counter"
-      hx-post="/decrease"
-      class="bg-pink-700 hover:bg-pink-800 rounded-lg py-2.5 px-4"
-    >
-    -
-    </button>
-    <button
-      hx-target="#counter"
-      hx-post="/increase"
-      class="bg-pink-700 hover:bg-pink-800 rounded-lg py-2.5 px-4"
-    >
-    +
-    </button>
+  <div class="text-slate-400 sm:mt-10 lg:mt-40">
+    <p class="font-mono font-semibold text-2xl">Hi, I&apos;m</p>
+    <h1
+      class="text-7xl bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-orange-200 to-orange-200 font-bold">
+      Ryan Miville</h1>
+    <p class="py-4 text-4xl font-semibold">Backend Web Developer and Data Engineer</p>
+    <p class="max-w-prose">I am skilled in designing, building, and maintaining high-performance
+      data pipelines, APIs, and web applications. I&apos;m currently at SecurityScorecard, where
+      I use my skills to make the Internet a little safer.</p>
+    <p class="font-mono text-2xl mt-32 text-center">
+      <span class="text-4xl">🚧</span> SITE UNDER CONSTRUCTION <span class="text-4xl">🚧</span>
+    </p>
   </div>
 
 {% endblock %}

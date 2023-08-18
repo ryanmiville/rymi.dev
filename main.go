@@ -16,7 +16,6 @@ var (
 	views embed.FS
 	//go:embed public/*
 	public embed.FS
-	count  int
 )
 
 func main() {
@@ -34,7 +33,8 @@ func main() {
 func createApp() *fiber.App {
 	engine := django.NewPathForwardingFileSystem(http.FS(views), "/views", ".html")
 	app := fiber.New(fiber.Config{
-		Views: engine,
+		Views:             engine,
+		PassLocalsToViews: true,
 	})
 	app.Use("/public", filesystem.New(filesystem.Config{
 		Root:       http.FS(public),
@@ -48,7 +48,8 @@ func createAppDev() *fiber.App {
 	engine := django.New("./views", ".html")
 	engine.Reload(true)
 	app := fiber.New(fiber.Config{
-		Views: engine,
+		Views:             engine,
+		PassLocalsToViews: true,
 	})
 	app.Static("/public", "./public", fiber.Static{
 		CacheDuration: -1,
@@ -57,23 +58,20 @@ func createAppDev() *fiber.App {
 }
 
 func initRoutes(app *fiber.App) {
+	app.Use(func(c *fiber.Ctx) error {
+		c.Locals("PathName", c.Path())
+		return c.Next()
+	})
+
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("index", fiber.Map{
-			"Count": count,
-		})
+		return c.Render("index", fiber.Map{})
 	})
 
-	app.Post("/increase", func(c *fiber.Ctx) error {
-		count = count + 1
-		return c.Render("partials/counter", fiber.Map{
-			"Count": count,
-		})
+	app.Get("/about", func(c *fiber.Ctx) error {
+		return c.Render("about", fiber.Map{})
 	})
 
-	app.Post("/decrease", func(c *fiber.Ctx) error {
-		count = count - 1
-		return c.Render("partials/counter", fiber.Map{
-			"Count": count,
-		})
+	app.Get("/blog", func(c *fiber.Ctx) error {
+		return c.Render("blog", fiber.Map{})
 	})
 }

@@ -26,7 +26,11 @@ func main() {
 
 	initRoutes(app)
 
-	log.Fatal(app.Listen("0.0.0.0:8080"))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "3000"
+	}
+	log.Fatal(app.Listen("0.0.0.0:" + port))
 }
 
 // createApp creates a fiber app with embedded views and assets

@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -77,5 +78,10 @@ func initRoutes(app *fiber.App) {
 
 	app.Get("/blog", func(c *fiber.Ctx) error {
 		return c.Render("blog", fiber.Map{})
+	})
+
+	app.Get("/blog/:slug", func(c *fiber.Ctx) error {
+		name := fmt.Sprintf("posts/%s", c.Params("slug"))
+		return c.Render(name, fiber.Map{})
 	})
 }

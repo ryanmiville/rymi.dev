@@ -1,4 +1,4 @@
-module github.com/ryanmiville/go-htmx-tailwind-template
+module github.com/ryanmiville/rymi.dev
 
 go 1.21
 

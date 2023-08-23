@@ -17,6 +17,8 @@ var (
 	views embed.FS
 	//go:embed public/*
 	public embed.FS
+	//go:embed articles/*
+	articles embed.FS
 )
 
 func main() {
@@ -83,5 +85,16 @@ func initRoutes(app *fiber.App) {
 	app.Get("/blog/:slug", func(c *fiber.Ctx) error {
 		name := fmt.Sprintf("posts/%s", c.Params("slug"))
 		return c.Render(name, fiber.Map{})
+	})
+
+	app.Get("/post/:slug", func(c *fiber.Ctx) error {
+		// 1. get the .md file
+		name := fmt.Sprintf("articles/%s.md", c.Params("slug"))
+		// 2. parse it using goldmark
+		content := parse(name)
+		// 3. pass the html to the post template as Content
+		return c.Render("article", fiber.Map{
+			"Content": content,
+		})
 	})
 }

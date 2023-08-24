@@ -17,8 +17,10 @@ var (
 	views embed.FS
 	//go:embed public/*
 	public embed.FS
-	//go:embed articles/*
-	articles embed.FS
+	//go:embed posts/*
+	posts embed.FS
+
+	readPostFunc func(name string) ([]byte, error) = posts.ReadFile
 )
 
 func main() {
@@ -61,6 +63,9 @@ func createAppDev() *fiber.App {
 	app.Static("/public", "./public", fiber.Static{
 		CacheDuration: -1,
 	})
+
+	readPostFunc = os.ReadFile
+
 	return app
 }
 
@@ -83,22 +88,10 @@ func initRoutes(app *fiber.App) {
 	})
 
 	app.Get("/blog/:slug", func(c *fiber.Ctx) error {
-		name := fmt.Sprintf("posts/%s", c.Params("slug"))
-		return c.Render(name, fiber.Map{})
-	})
+		name := fmt.Sprintf("posts/%s.md", c.Params("slug"))
+		content := parseMarkdown(name)
 
-	app.Get("/post/:slug", func(c *fiber.Ctx) error {
-		name := fmt.Sprintf("articles/%s.md", c.Params("slug"))
-
-		// super janky
-		var content string
-		if os.Getenv("DEV") == "true" {
-			content = parseFromDisk(name)
-		} else {
-			content = parse(name)
-		}
-
-		return c.Render("article", fiber.Map{
+		return c.Render("post", fiber.Map{
 			"Content": content,
 		})
 	})

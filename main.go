@@ -88,11 +88,16 @@ func initRoutes(app *fiber.App) {
 	})
 
 	app.Get("/post/:slug", func(c *fiber.Ctx) error {
-		// 1. get the .md file
 		name := fmt.Sprintf("articles/%s.md", c.Params("slug"))
-		// 2. parse it using goldmark
-		content := parse(name)
-		// 3. pass the html to the post template as Content
+
+		// super janky
+		var content string
+		if os.Getenv("DEV") == "true" {
+			content = parseFromDisk(name)
+		} else {
+			content = parse(name)
+		}
+
 		return c.Render("article", fiber.Map{
 			"Content": content,
 		})

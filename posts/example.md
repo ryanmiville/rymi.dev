@@ -1,4 +1,8 @@
-# This is an example blog post
+---
+title: Example
+summary: |
+  This is an example blog post.
+---
 
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus, quas. Laborum, hic placeat error fugit eligendi
 illum ex animi ad numquam unde veritatis natus cumque doloribus iure voluptate sint? Dolore.

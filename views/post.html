@@ -3,7 +3,9 @@
 {% block content %}
 
 <article class="blog-post">
-	{{Content}}
+	<h1>{{Content.Title}}</h1>
+	<h3>{{Content.Summary}}</h3>
+	{{Content.Html}}
 </article>
 
 {% endblock %}

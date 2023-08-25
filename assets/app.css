@@ -10,6 +10,10 @@
 	@apply text-3xl font-extrabold;
 }
 
+.blog-post h3 {
+	@apply text-xl text-slate-500;
+}
+
 .blog-post h2 {
 	@apply text-2xl font-extrabold;
 }

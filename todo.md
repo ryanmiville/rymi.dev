@@ -1,4 +1,5 @@
 # todo
 
-- parse front matter and pass that as well
+- list blog posts
+- better styling for blog posts
 - bundle htmx

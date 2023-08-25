@@ -6,15 +6,15 @@ import (
 	"github.com/yuin/goldmark"
 )
 
-func parseMarkdown(name string) string {
+func parseMarkdown(name string) (string, error) {
 	src, err := readPostFunc(name)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 	var buf bytes.Buffer
 	if err := goldmark.Convert(src, &buf); err != nil {
-		panic(err)
+		return "", err
 	}
 
-	return buf.String()
+	return buf.String(), nil
 }

@@ -44,6 +44,7 @@ func createApp() *fiber.App {
 	app := fiber.New(fiber.Config{
 		Views:             engine,
 		PassLocalsToViews: true,
+		ErrorHandler:      ErrorHandler,
 	})
 	app.Use("/public", filesystem.New(filesystem.Config{
 		Root:       http.FS(public),
@@ -59,6 +60,7 @@ func createAppDev() *fiber.App {
 	app := fiber.New(fiber.Config{
 		Views:             engine,
 		PassLocalsToViews: true,
+		ErrorHandler:      ErrorHandler,
 	})
 	app.Static("/public", "./public", fiber.Static{
 		CacheDuration: -1,
@@ -89,7 +91,10 @@ func initRoutes(app *fiber.App) {
 
 	app.Get("/blog/:slug", func(c *fiber.Ctx) error {
 		name := fmt.Sprintf("posts/%s.md", c.Params("slug"))
-		content := parseMarkdown(name)
+		content, err := parseMarkdown(name)
+		if err != nil {
+			return err
+		}
 
 		return c.Render("post", fiber.Map{
 			"Content": content,

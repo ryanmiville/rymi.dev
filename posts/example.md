@@ -1,7 +1,7 @@
 ---
-title: Example
+title: Example Title
 summary: |
-  This is an example blog post.
+  This is an example blog post summary.
 ---
 
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus, quas. Laborum, hic placeat error fugit eligendi

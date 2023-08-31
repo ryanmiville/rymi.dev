@@ -4,4 +4,11 @@
 
 <h1 class="font-extrabold text-3xl">Blog</h1>
 
+<ul>
+	{% for post in Posts %}
+	<li>
+		<a href="/blog/{{post.Url}}">{{post.Title}}</a>
+	</li>
+	{% endfor %}
+</ul>
 {% endblock %}

@@ -86,7 +86,13 @@ func initRoutes(app *fiber.App) {
 	})
 
 	app.Get("/blog", func(c *fiber.Ctx) error {
-		return c.Render("blog", fiber.Map{})
+		posts, err := getPosts()
+		if err != nil {
+			panic(err)
+		}
+		return c.Render("blog", fiber.Map{
+			"Posts": posts,
+		})
 	})
 
 	app.Get("/blog/:slug", func(c *fiber.Ctx) error {

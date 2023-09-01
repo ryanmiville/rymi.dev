@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"strings"
 
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/parser"
@@ -61,7 +60,8 @@ func getPosts() ([]Post, error) {
 		if err != nil {
 			return nil, err
 		}
-		name, _ := strings.CutSuffix(post.Name(), ".md")
+		n := post.Name()
+		name := n[:len(n)-3]
 		pp = append(pp, Post{Title: p.Title, Url: name})
 	}
 

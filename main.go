@@ -11,6 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/ryanmiville/rymi.dev/components"
+	"github.com/ryanmiville/rymi.dev/markdown"
 )
 
 var (
@@ -22,6 +23,7 @@ var (
 
 func main() {
 	app := createApp()
+	markdown.FS = posts
 	initRoutes(app)
 
 	port := os.Getenv("PORT")
@@ -53,7 +55,7 @@ func initRoutes(app *fiber.App) {
 	})
 
 	app.Get("/blog", func(c *fiber.Ctx) error {
-		posts, err := components.GetPosts(posts)
+		posts, err := markdown.Posts()
 		if err != nil {
 			return err
 		}
@@ -62,7 +64,7 @@ func initRoutes(app *fiber.App) {
 
 	app.Get("/blog/:slug", func(c *fiber.Ctx) error {
 		name := fmt.Sprintf("posts/%s.md", c.Params("slug"))
-		content, err := components.ParseMarkdown(posts, name)
+		content, err := markdown.Parse(name)
 		if err != nil {
 			return err
 		}

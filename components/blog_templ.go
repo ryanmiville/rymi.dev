@@ -10,8 +10,9 @@ import "io"
 import "bytes"
 
 import "github.com/gofiber/fiber/v2"
+import "github.com/ryanmiville/rymi.dev/markdown"
 
-func Blog(c *fiber.Ctx, posts []Post) templ.Component {
+func Blog(c *fiber.Ctx, posts []markdown.Post) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
 		templBuffer, templIsBuffer := w.(*bytes.Buffer)
 		if !templIsBuffer {
@@ -87,7 +88,7 @@ func Blog(c *fiber.Ctx, posts []Post) templ.Component {
 	})
 }
 
-func BlogPost(c *fiber.Ctx, p PostContent) templ.Component {
+func BlogPost(c *fiber.Ctx, content markdown.Content) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
 		templBuffer, templIsBuffer := w.(*bytes.Buffer)
 		if !templIsBuffer {
@@ -110,7 +111,7 @@ func BlogPost(c *fiber.Ctx, p PostContent) templ.Component {
 			if err != nil {
 				return err
 			}
-			var var_8 string = p.Title
+			var var_8 string = content.Title
 			_, err = templBuffer.WriteString(templ.EscapeString(var_8))
 			if err != nil {
 				return err
@@ -119,7 +120,7 @@ func BlogPost(c *fiber.Ctx, p PostContent) templ.Component {
 			if err != nil {
 				return err
 			}
-			var var_9 string = p.Summary
+			var var_9 string = content.Summary
 			_, err = templBuffer.WriteString(templ.EscapeString(var_9))
 			if err != nil {
 				return err
@@ -128,7 +129,7 @@ func BlogPost(c *fiber.Ctx, p PostContent) templ.Component {
 			if err != nil {
 				return err
 			}
-			err = p.Html.Render(ctx, templBuffer)
+			err = content.Html.Render(ctx, templBuffer)
 			if err != nil {
 				return err
 			}

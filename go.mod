@@ -10,6 +10,7 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
+	github.com/a-h/templ v0.2.334 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/flosch/pongo2/v6 v6.0.0 // indirect
 	github.com/gofiber/template v1.8.2 // indirect

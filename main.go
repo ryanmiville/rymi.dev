@@ -7,28 +7,23 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
-	"github.com/gofiber/template/django/v3"
+	"github.com/ryanmiville/rymi.dev/components"
+	"github.com/ryanmiville/rymi.dev/markdown"
 )
 
 var (
-	//go:embed views/*
-	views embed.FS
 	//go:embed public/*
 	public embed.FS
 	//go:embed posts/*
 	posts embed.FS
-
-	readPostFunc func(name string) ([]byte, error) = posts.ReadFile
 )
 
 func main() {
 	app := createApp()
-	if os.Getenv("DEV") == "true" {
-		app = createAppDev()
-	}
-
+	markdown.FS = posts
 	initRoutes(app)
 
 	port := os.Getenv("PORT")
@@ -38,13 +33,10 @@ func main() {
 	log.Fatal(app.Listen("0.0.0.0:" + port))
 }
 
-// createApp creates a fiber app with embedded views and assets
+// createApp creates a fiber app with embedded assets
 func createApp() *fiber.App {
-	engine := django.NewPathForwardingFileSystem(http.FS(views), "/views", ".html")
 	app := fiber.New(fiber.Config{
-		Views:             engine,
-		PassLocalsToViews: true,
-		ErrorHandler:      ErrorHandler,
+		ErrorHandler: ErrorHandler,
 	})
 	app.Use("/public", filesystem.New(filesystem.Config{
 		Root:       http.FS(public),
@@ -53,57 +45,35 @@ func createApp() *fiber.App {
 	return app
 }
 
-// createAppDev creates a fiber app that reads views and assets from disk
-func createAppDev() *fiber.App {
-	engine := django.New("./views", ".html")
-	engine.Reload(true)
-	app := fiber.New(fiber.Config{
-		Views:             engine,
-		PassLocalsToViews: true,
-		ErrorHandler:      ErrorHandler,
-	})
-	app.Static("/public", "./public", fiber.Static{
-		CacheDuration: -1,
-	})
-
-	readPostFunc = os.ReadFile
-
-	return app
-}
-
 func initRoutes(app *fiber.App) {
-	app.Use(func(c *fiber.Ctx) error {
-		c.Locals("PathName", c.Path())
-		return c.Next()
-	})
-
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("index", fiber.Map{})
+		return Render(components.Home(c), c)
 	})
 
 	app.Get("/about", func(c *fiber.Ctx) error {
-		return c.Render("about", fiber.Map{})
+		return Render(components.About(c), c)
 	})
 
 	app.Get("/blog", func(c *fiber.Ctx) error {
-		posts, err := getPosts()
+		posts, err := markdown.Posts()
 		if err != nil {
-			panic(err)
+			return err
 		}
-		return c.Render("blog", fiber.Map{
-			"Posts": posts,
-		})
+		return Render(components.Blog(c, posts), c)
 	})
 
 	app.Get("/blog/:slug", func(c *fiber.Ctx) error {
 		name := fmt.Sprintf("posts/%s.md", c.Params("slug"))
-		content, err := parseMarkdown(name)
+		content, err := markdown.Parse(name)
 		if err != nil {
 			return err
 		}
 
-		return c.Render("post", fiber.Map{
-			"Content": content,
-		})
+		return Render(components.BlogPost(c, content), c)
 	})
+}
+
+func Render(comp templ.Component, c *fiber.Ctx) error {
+	c.Context().SetContentType(fiber.MIMETextHTMLCharsetUTF8)
+	return comp.Render(c.Context(), c)
 }

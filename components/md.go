@@ -1,8 +1,10 @@
-package main
+package components
 
 import (
 	"bytes"
+	"embed"
 
+	"github.com/a-h/templ"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/parser"
 	"go.abhg.dev/goldmark/frontmatter"
@@ -18,15 +20,15 @@ type Post struct {
 	Url   string
 }
 
-type blogPost struct {
+type PostContent struct {
 	FrontMatter
-	Html string
+	Html templ.Component
 }
 
-func parseMarkdown(name string) (blogPost, error) {
-	src, err := readPostFunc(name)
+func ParseMarkdown(f embed.FS, name string) (PostContent, error) {
+	src, err := f.ReadFile(name)
 	if err != nil {
-		return blogPost{}, err
+		return PostContent{}, err
 	}
 	md := goldmark.New(
 		goldmark.WithExtensions(
@@ -37,26 +39,26 @@ func parseMarkdown(name string) (blogPost, error) {
 
 	var buf bytes.Buffer
 	if err := md.Convert(src, &buf, parser.WithContext(ctx)); err != nil {
-		return blogPost{}, err
+		return PostContent{}, err
 	}
 
 	var meta FrontMatter
 	if err := frontmatter.Get(ctx).Decode(&meta); err != nil {
-		return blogPost{}, err
+		return PostContent{}, err
 	}
 
-	return blogPost{FrontMatter: meta, Html: buf.String()}, nil
+	return PostContent{FrontMatter: meta, Html: Unsafe(buf.String())}, nil
 }
 
-func getPosts() ([]Post, error) {
-	posts, err := posts.ReadDir("posts")
+func GetPosts(f embed.FS) ([]Post, error) {
+	posts, err := f.ReadDir("posts")
 	if err != nil {
 		return nil, err
 	}
 
 	var pp []Post
 	for _, post := range posts {
-		p, err := parseMarkdown("posts/" + post.Name())
+		p, err := ParseMarkdown(f, "posts/"+post.Name())
 		if err != nil {
 			return nil, err
 		}

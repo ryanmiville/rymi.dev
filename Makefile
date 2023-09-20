@@ -10,4 +10,4 @@ css:
 	npx tailwindcss -i ./assets/global.css -o ./public/global.css --watch --minify
 
 run:
-	concurrently "DEV=true air" "make css"
+	concurrently "air" "make css"

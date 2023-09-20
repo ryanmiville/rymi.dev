@@ -1,9 +1,18 @@
 root = "."
 tmp_dir = "tmp"
+
 [build]
-cmd = "go build -o ./tmp/main ."
+cmd = "templ generate && go build -o ./tmp/main ."
 bin = "./tmp/main"
-delay = 1000                                    # ms
-exclude_dir = ["tmp", "vendor", "node_modules"]
-include_ext = ["go"]
-exclude_regex = ["_test\\.go"]
+delay = 1000                                              # ms
+kill_delay = "0s"
+exclude_dir = ["tmp", "node_modules", "assets", "global"]
+include_ext = ["go", "templ"]
+exclude_regex = ["_test\\.go", ".*_templ.go"]
+
+[color]
+app = ""
+build = "yellow"
+main = "magenta"
+runner = "green"
+watcher = "cyan"

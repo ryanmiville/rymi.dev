@@ -27,7 +27,7 @@ templ Base(c *fiber.Ctx) {
 }
 
 func navClass(path string, pattern string) templ.CSSClass {
-    matched, _ := regexp.MatchString(pattern, path)
+  matched, _ := regexp.MatchString(pattern, path)
 	if matched {
 		return templ.SafeClass("text-purple-400")
 	} 
@@ -35,9 +35,6 @@ func navClass(path string, pattern string) templ.CSSClass {
 }
 
 templ Navigation(path string) {
-	<nav id="nav" class="flex justify-end py-10 px-20 font-mono">
-		<a class={"transition-all bg-clip-text text-xl p-5", navClass(path, `^/$`)} href="/">home</a>
-		<a class={"transition-all bg-clip-text text-xl p-5", navClass(path, `^/about$`)} href="/about">about</a>
-		<a class={"transition-all bg-clip-text text-xl p-5", navClass(path, `^/blog`)} href="/blog">blog</a>
-	</nav>
+	<nav id="nav" class="flex justify-end py-10 px-20 font-mono"><a class={ "transition-all bg-clip-text text-xl p-5", navClass(path, `^/$`) } href="/">home</a> <a class={ "transition-all bg-clip-text text-xl p-5", navClass(path, `^/about$`) } href="/about">about</a> <a class={ "transition-all bg-clip-text text-xl p-5", navClass(path, `^/blog`) } href="/blog">blog</a></nav>
 }
+

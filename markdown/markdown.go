@@ -12,8 +12,9 @@ import (
 	"go.abhg.dev/goldmark/frontmatter"
 )
 
-// FS should be set before calling any functions
-var FS embed.FS
+type Markdown struct {
+	embed.FS
+}
 
 type FrontMatter struct {
 	Title   string `yaml:"title"`
@@ -30,12 +31,12 @@ type Content struct {
 	Html templ.Component
 }
 
-func Parse(name string) (Content, error) {
-	src, err := FS.ReadFile(name)
+func (md *Markdown) Parse(name string) (Content, error) {
+	src, err := md.FS.ReadFile(name)
 	if err != nil {
 		return Content{}, err
 	}
-	md := goldmark.New(
+	gm := goldmark.New(
 		goldmark.WithExtensions(
 			&frontmatter.Extender{},
 		),
@@ -43,7 +44,7 @@ func Parse(name string) (Content, error) {
 	ctx := parser.NewContext()
 
 	var buf bytes.Buffer
-	if err := md.Convert(src, &buf, parser.WithContext(ctx)); err != nil {
+	if err := gm.Convert(src, &buf, parser.WithContext(ctx)); err != nil {
 		return Content{}, err
 	}
 
@@ -55,15 +56,15 @@ func Parse(name string) (Content, error) {
 	return Content{FrontMatter: meta, Html: unsafe(buf.String())}, nil
 }
 
-func Posts() ([]Post, error) {
-	posts, err := FS.ReadDir("posts")
+func (md *Markdown) Posts() ([]Post, error) {
+	posts, err := md.FS.ReadDir("posts")
 	if err != nil {
 		return nil, err
 	}
 
 	var pp []Post
 	for _, post := range posts {
-		p, err := Parse("posts/" + post.Name())
+		p, err := md.Parse("posts/" + post.Name())
 		if err != nil {
 			return nil, err
 		}

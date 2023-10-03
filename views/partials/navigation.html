@@ -1,0 +1,5 @@
+<nav id="nav" class="flex justify-end py-10 px-20 font-mono"  >
+	<a class="transition-all bg-clip-text text-xl p-5 {{if eq .Path "/"}}text-purple-400{{else}} text-slate-400 hover:text-purple-200{{end}}" href="/">home</a>
+	<a class="transition-all bg-clip-text text-xl p-5 {{if eq .Path "/about"}}text-purple-400{{else}} text-slate-400 hover:text-purple-200{{end}}" href="/about">about</a>
+	<a class="transition-all bg-clip-text text-xl p-5 {{if eq .Path "/blog"}}text-purple-400{{else}} text-slate-400 hover:text-purple-200{{end}}" href="/blog">blog</a>
+</nav>

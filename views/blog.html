@@ -1,0 +1,11 @@
+<div class="prose lg:prose-xl text-slate-400 prose-headings:text-slate-200 prose-invert">
+	<h1 class="font-extrabold text-3xl">Blog</h1>
+
+	<ul>
+		{{range .Posts}}
+		<li>
+			<a href="/blog/{{.Url}}">{{.Title}}</a>
+		</li>
+		{{end}}
+	</ul>
+</div>

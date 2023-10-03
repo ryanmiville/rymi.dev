@@ -4,9 +4,7 @@ import (
 	"embed"
 	"fmt"
 
-	"github.com/a-h/templ"
 	"github.com/gofiber/fiber/v2"
-	"github.com/ryanmiville/rymi.dev/components"
 	"github.com/ryanmiville/rymi.dev/markdown"
 )
 
@@ -21,11 +19,11 @@ type Handler struct {
 }
 
 func (h *Handler) Index(c *fiber.Ctx) error {
-	return render(components.Home(c), c)
+	return c.Render("views/index", fiber.Map{}, "views/layouts/base")
 }
 
 func (h *Handler) About(c *fiber.Ctx) error {
-	return render(components.About(c), c)
+	return c.Render("views/about", fiber.Map{}, "views/layouts/base")
 }
 
 func (h *Handler) Blog(c *fiber.Ctx) error {
@@ -33,7 +31,7 @@ func (h *Handler) Blog(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return render(components.Blog(c, posts), c)
+	return c.Render("views/blog", fiber.Map{"Posts": posts}, "views/layouts/base")
 }
 
 func (h *Handler) BlogPost(c *fiber.Ctx) error {
@@ -43,14 +41,9 @@ func (h *Handler) BlogPost(c *fiber.Ctx) error {
 		return err
 	}
 
-	return render(components.BlogPost(c, content), c)
+	return c.Render("views/post", fiber.Map{"Content": content}, "views/layouts/base")
 }
 
 func (h *Handler) Error(c *fiber.Ctx, err error) error {
-	return render(components.ErrorPage(c), c)
-}
-
-func render(comp templ.Component, c *fiber.Ctx) error {
-	c.Context().SetContentType(fiber.MIMETextHTMLCharsetUTF8)
-	return comp.Render(c.Context(), c)
+	return c.Render("views/error", fiber.Map{}, "views/layouts/base")
 }

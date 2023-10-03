@@ -2,11 +2,9 @@ package markdown
 
 import (
 	"bytes"
-	"context"
 	"embed"
-	"io"
+	"html/template"
 
-	"github.com/a-h/templ"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/parser"
 	"go.abhg.dev/goldmark/frontmatter"
@@ -28,7 +26,7 @@ type Post struct {
 
 type Content struct {
 	FrontMatter
-	Html templ.Component
+	Html template.HTML
 }
 
 func (md *Markdown) Parse(name string) (Content, error) {
@@ -53,7 +51,7 @@ func (md *Markdown) Parse(name string) (Content, error) {
 		return Content{}, err
 	}
 
-	return Content{FrontMatter: meta, Html: unsafe(buf.String())}, nil
+	return Content{FrontMatter: meta, Html: template.HTML(buf.String())}, nil
 }
 
 func (md *Markdown) Posts() ([]Post, error) {
@@ -74,11 +72,4 @@ func (md *Markdown) Posts() ([]Post, error) {
 	}
 
 	return pp, nil
-}
-
-func unsafe(html string) templ.Component {
-	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
-		_, err = io.WriteString(w, html)
-		return
-	})
 }

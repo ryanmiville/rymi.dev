@@ -3,8 +3,8 @@ module github.com/ryanmiville/rymi.dev
 go 1.21
 
 require (
-	github.com/a-h/templ v0.2.334
 	github.com/gofiber/fiber/v2 v2.49.2
+	github.com/gofiber/template/html/v2 v2.0.5
 	github.com/yuin/goldmark v1.5.6
 	go.abhg.dev/goldmark/frontmatter v0.1.0
 )
@@ -12,6 +12,8 @@ require (
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
+	github.com/gofiber/template v1.8.2 // indirect
+	github.com/gofiber/utils v1.1.0 // indirect
 	github.com/google/uuid v1.3.1 // indirect
 	github.com/klauspost/compress v1.16.7 // indirect
 	github.com/kr/pretty v0.3.1 // indirect

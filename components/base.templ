@@ -1,7 +1,7 @@
 package components
 
 import "github.com/gofiber/fiber/v2"
-import "regexp"
+import "strings"
 
 templ Base(c *fiber.Ctx) {
 	<html class="bg-slate-900 text-slate-200 mx-auto">
@@ -27,14 +27,20 @@ templ Base(c *fiber.Ctx) {
 }
 
 func navClass(path string, pattern string) templ.CSSClass {
-  matched, _ := regexp.MatchString(pattern, path)
-	if matched {
+	if strings.HasPrefix(path, "/blog") {
+		path = "/blog"
+	}
+	if path == pattern {
 		return templ.SafeClass("text-purple-400")
 	} 
 	return templ.SafeClass("text-slate-400 hover:text-purple-200")
 }
 
 templ Navigation(path string) {
-	<nav id="nav" class="flex justify-end py-10 px-20 font-mono"><a class={ "transition-all bg-clip-text text-xl p-5", navClass(path, `^/$`) } href="/">home</a> <a class={ "transition-all bg-clip-text text-xl p-5", navClass(path, `^/about$`) } href="/about">about</a> <a class={ "transition-all bg-clip-text text-xl p-5", navClass(path, `^/blog`) } href="/blog">blog</a></nav>
+	<nav id="nav" class="flex justify-end py-10 px-20 font-mono">
+		<a class={ "transition-all bg-clip-text text-xl p-5", navClass(path, `/`) } href="/">home</a> 
+		<a class={ "transition-all bg-clip-text text-xl p-5", navClass(path, `/about`) } href="/about">about</a> 
+		<a class={ "transition-all bg-clip-text text-xl p-5", navClass(path, `/blog`) } href="/blog">blog</a>
+	</nav>
 }
 

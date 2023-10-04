@@ -31,7 +31,7 @@ func Blog(c *fiber.Ctx, posts []markdown.Post) templ.Component {
 				templBuffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templBuffer)
 			}
-			_, err = templBuffer.WriteString("<h1 class=\"font-extrabold text-3xl\">")
+			_, err = templBuffer.WriteString("<div class=\"prose lg:prose-xl text-slate-400 prose-headings:text-slate-200 prose-invert\"><h1 class=\"font-extrabold text-3xl\">")
 			if err != nil {
 				return err
 			}
@@ -40,7 +40,7 @@ func Blog(c *fiber.Ctx, posts []markdown.Post) templ.Component {
 			if err != nil {
 				return err
 			}
-			_, err = templBuffer.WriteString("</h1> <ul>")
+			_, err = templBuffer.WriteString("</h1><ul>")
 			if err != nil {
 				return err
 			}
@@ -68,7 +68,7 @@ func Blog(c *fiber.Ctx, posts []markdown.Post) templ.Component {
 					return err
 				}
 			}
-			_, err = templBuffer.WriteString("</ul>")
+			_, err = templBuffer.WriteString("</ul></div>")
 			if err != nil {
 				return err
 			}

@@ -30,7 +30,7 @@ func About(c *fiber.Ctx) templ.Component {
 				templBuffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templBuffer)
 			}
-			_, err = templBuffer.WriteString("<h1 class=\"font-extrabold text-3xl\">")
+			_, err = templBuffer.WriteString("<div class=\"prose lg:prose-xl text-slate-400 prose-headings:text-slate-200 prose-invert\"><h1 class=\"font-extrabold text-3xl\">")
 			if err != nil {
 				return err
 			}
@@ -39,7 +39,7 @@ func About(c *fiber.Ctx) templ.Component {
 			if err != nil {
 				return err
 			}
-			_, err = templBuffer.WriteString("</h1>")
+			_, err = templBuffer.WriteString("</h1></div>")
 			if err != nil {
 				return err
 			}

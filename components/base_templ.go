@@ -10,7 +10,7 @@ import "io"
 import "bytes"
 
 import "github.com/gofiber/fiber/v2"
-import "regexp"
+import "strings"
 
 func Base(c *fiber.Ctx) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
@@ -71,8 +71,10 @@ func Base(c *fiber.Ctx) templ.Component {
 }
 
 func navClass(path string, pattern string) templ.CSSClass {
-	matched, _ := regexp.MatchString(pattern, path)
-	if matched {
+	if strings.HasPrefix(path, "/blog") {
+		path = "/blog"
+	}
+	if path == pattern {
 		return templ.SafeClass("text-purple-400")
 	}
 	return templ.SafeClass("text-slate-400 hover:text-purple-200")
@@ -95,7 +97,7 @@ func Navigation(path string) templ.Component {
 		if err != nil {
 			return err
 		}
-		var var_5 = []any{"transition-all bg-clip-text text-xl p-5", navClass(path, `^/$`)}
+		var var_5 = []any{"transition-all bg-clip-text text-xl p-5", navClass(path, `/`)}
 		err = templ.RenderCSSItems(ctx, templBuffer, var_5...)
 		if err != nil {
 			return err
@@ -121,7 +123,7 @@ func Navigation(path string) templ.Component {
 		if err != nil {
 			return err
 		}
-		var var_7 = []any{"transition-all bg-clip-text text-xl p-5", navClass(path, `^/about$`)}
+		var var_7 = []any{"transition-all bg-clip-text text-xl p-5", navClass(path, `/about`)}
 		err = templ.RenderCSSItems(ctx, templBuffer, var_7...)
 		if err != nil {
 			return err
@@ -147,7 +149,7 @@ func Navigation(path string) templ.Component {
 		if err != nil {
 			return err
 		}
-		var var_9 = []any{"transition-all bg-clip-text text-xl p-5", navClass(path, `^/blog`)}
+		var var_9 = []any{"transition-all bg-clip-text text-xl p-5", navClass(path, `/blog`)}
 		err = templ.RenderCSSItems(ctx, templBuffer, var_9...)
 		if err != nil {
 			return err

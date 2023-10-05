@@ -5,7 +5,7 @@ import "github.com/ryanmiville/rymi.dev/markdown"
 
 templ Blog(c *fiber.Ctx, posts []markdown.Post) {
 	@Base(c) {
-		<div class="prose lg:prose-xl text-slate-400 prose-headings:text-slate-200 prose-invert">
+		<div hx-boost="true" class="prose lg:prose-xl text-slate-400 prose-headings:text-slate-200 prose-invert">
 			<h1 class="font-extrabold text-3xl">Blog</h1>
 			<ul>
 				for _, post := range posts {

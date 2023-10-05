@@ -93,7 +93,7 @@ func Navigation(path string) templ.Component {
 			var_4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, err = templBuffer.WriteString("<nav id=\"nav\" class=\"flex justify-end py-10 px-20 font-mono\">")
+		_, err = templBuffer.WriteString("<nav id=\"nav\" hx-boost=\"true\" class=\"flex justify-end py-10 px-20 font-mono\">")
 		if err != nil {
 			return err
 		}

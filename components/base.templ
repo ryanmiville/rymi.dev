@@ -37,7 +37,7 @@ func navClass(path string, pattern string) templ.CSSClass {
 }
 
 templ Navigation(path string) {
-	<nav id="nav" class="flex justify-end py-10 px-20 font-mono">
+	<nav id="nav" hx-boost="true" class="flex justify-end py-10 px-20 font-mono">
 		<a class={ "transition-all bg-clip-text text-xl p-5", navClass(path, `/`) } href="/">home</a> 
 		<a class={ "transition-all bg-clip-text text-xl p-5", navClass(path, `/about`) } href="/about">about</a> 
 		<a class={ "transition-all bg-clip-text text-xl p-5", navClass(path, `/blog`) } href="/blog">blog</a>

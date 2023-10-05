@@ -61,17 +61,8 @@ func Home(c *fiber.Ctx) templ.Component {
 			if err != nil {
 				return err
 			}
-			var_6 := `I build high-performance`
+			var_6 := `I build high-performance data pipelines and web services.`
 			_, err = templBuffer.WriteString(var_6)
-			if err != nil {
-				return err
-			}
-			_, err = templBuffer.WriteString(" ")
-			if err != nil {
-				return err
-			}
-			var_7 := `data pipelines and web services.`
-			_, err = templBuffer.WriteString(var_7)
 			if err != nil {
 				return err
 			}
@@ -79,17 +70,17 @@ func Home(c *fiber.Ctx) templ.Component {
 			if err != nil {
 				return err
 			}
-			var_8 := `🚧`
+			var_7 := `🚧`
+			_, err = templBuffer.WriteString(var_7)
+			if err != nil {
+				return err
+			}
+			_, err = templBuffer.WriteString("</span>")
+			if err != nil {
+				return err
+			}
+			var_8 := `SITE UNDER CONSTRUCTION `
 			_, err = templBuffer.WriteString(var_8)
-			if err != nil {
-				return err
-			}
-			_, err = templBuffer.WriteString("</span> ")
-			if err != nil {
-				return err
-			}
-			var_9 := `SITE UNDER CONSTRUCTION `
-			_, err = templBuffer.WriteString(var_9)
 			if err != nil {
 				return err
 			}
@@ -97,8 +88,8 @@ func Home(c *fiber.Ctx) templ.Component {
 			if err != nil {
 				return err
 			}
-			var_10 := `🚧`
-			_, err = templBuffer.WriteString(var_10)
+			var_9 := `🚧`
+			_, err = templBuffer.WriteString(var_9)
 			if err != nil {
 				return err
 			}

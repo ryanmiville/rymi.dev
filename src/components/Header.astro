@@ -1,8 +1,7 @@
 ---
-import Logo from './Logo.astro'
-import Nav from './Nav.astro'
+import Nav from "./Nav.astro";
 
-const { current = '' } = Astro.props;
+const { current = "" } = Astro.props;
 ---
 
 <style>
@@ -16,6 +15,7 @@ const { current = '' } = Astro.props;
 </style>
 
 <header>
-  <Logo />
+  <!-- TODO decide if I want one -->
+  <!-- <Logo /> -->
   <Nav current={current} />
 </header>

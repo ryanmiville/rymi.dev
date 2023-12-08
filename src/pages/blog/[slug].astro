@@ -1,25 +1,43 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Bio from '../../components/Bio.astro';
-import getPostData from '../../utils/getPostData';
+import { getCollection, type CollectionEntry } from "astro:content";
+import Bio from "../../components/Bio.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
-  const posts = await Astro.glob('../../data/blog-posts/*.md');
-  return posts.map(p => ({
-    params: { slug: p.file.split('/').pop().split('.').shift() },
-    props: { post: p },
+  // const posts = await Astro.glob("../../data/blog-posts/*.md");
+  // return posts.map((p) => ({
+  //   params: { slug: p.file.split("/").pop()!.split(".").shift() },
+  //   props: { post: p },
+  // }));
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
   }));
 }
 
-const { Content, frontmatter } = Astro.props.post;
-const { title, description, publishDate } = frontmatter;
-const { slug, readingTime } = getPostData(Astro.props.post);
-const permalink = `${Astro.site.href}blog/${slug}`;
+type Props = CollectionEntry<"blog">;
+const post = Astro.props;
+const { Content } = await post.render();
+// const { Content, frontmatter } = Astro.props.post;
+const { title, description, publishDate } = post.data;
+const { slug } = post;
+const permalink = `${Astro.site!.href}blog/${slug}`;
 ---
 
-<BaseLayout title={title} description={description} permalink={permalink} current="blog">
+<BaseLayout
+  title={title}
+  description={description}
+  permalink={permalink}
+  current="blog"
+>
   <header>
-    <p>{publishDate} ~ {readingTime}</p>
+    <!-- <p>{publishDate} ~ {readingTime}</p> -->
+    <p>
+      <FormattedDate date={publishDate} />
+    </p>
+    <!-- <p>{publishDate}</p> -->
     <h1>{title}</h1>
     <hr />
   </header>
@@ -44,7 +62,7 @@ const permalink = `${Astro.site.href}blog/${slug}`;
   header p {
     color: var(--text-secondary);
     text-transform: uppercase;
-    font-family: var(--font-family-sans);
+    /* font-family: var(--font-family-sans); */
     font-weight: 600;
   }
 

@@ -25,14 +25,14 @@ const posts = (await getCollection("blog")).sort(
         const href = `/blog/${post.slug}`;
         return (
           <div>
-            {index !== 0 && <hr />}
-            <div class="post-item">
+            {index !== 0 && <hr class="my-14 m-auto" />}
+            <div>
               <h2>
                 <a href={href}>{post.data.title}</a>
               </h2>
               <p>{post.data.description}</p>
-              <div class="post-item-footer">
-                <span class="post-item-date">
+              <div class="font-bold">
+                <span class="text-left uppercase mr-4 text-[--text-secondary]">
                   — <FormattedDate date={post.data.publishDate} />
                 </span>
               </div>
@@ -43,11 +43,11 @@ const posts = (await getCollection("blog")).sort(
     }
   </div>
 </BaseLayout>
-
+<!-- 
 <style>
   h2,
   .post-item-footer {
-    /* font-family: var(--font-family-sans); */
+    font-family: var(--font-family-sans); */
     font-weight: 700;
   }
 
@@ -61,4 +61,4 @@ const posts = (await getCollection("blog")).sort(
   hr {
     margin: 60px auto;
   }
-</style>
+</style> -->

@@ -165,10 +165,10 @@ code {
   /* color: #555; */
   /* padding: 0.2em 0.4em;
   border-radius: 2px; */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; */
 
-	@apply py-1 px-2 text-sm text-gray-300 rounded-sm;
+	@apply py-1 px-2 text-sm text-gray-300 rounded-sm antialiased;
 }
 
 pre {

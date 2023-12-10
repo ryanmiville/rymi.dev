@@ -1,11 +1,13 @@
-import { defineConfig } from 'astro/config';
-import svelte from '@astrojs/svelte';
 import mdx from '@astrojs/mdx';
+import svelte from '@astrojs/svelte';
+import { defineConfig } from 'astro/config';
+import rehypeExternalLinks from 'rehype-external-links';
 import remarkGfm from 'remark-gfm';
 import remarkSmartypants from 'remark-smartypants';
-import rehypeExternalLinks from 'rehype-external-links';
 
 import tailwind from "@astrojs/tailwind";
+
+import tailwindTheme from './tailwind-dark.json';
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,7 +15,7 @@ export default defineConfig({
   integrations: [mdx(), svelte(), tailwind()],
   markdown: {
     shikiConfig: {
-      theme: 'nord'
+      theme: tailwindTheme
     },
     remarkPlugins: [remarkGfm, remarkSmartypants],
     rehypePlugins: [[rehypeExternalLinks, {

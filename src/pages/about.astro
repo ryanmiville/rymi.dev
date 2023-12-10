@@ -12,7 +12,7 @@ const permalink = `${Astro.site!.href}about`;
   permalink={permalink}
   current="about"
 >
-  <div class="container">
+  <div class="container prose dark:prose-invert">
     <h1>About</h1>
     <figure
       class="mx-auto mb-8 lg:float-right lg:-mt-12 lg:-mr-28 lg:mb-8 lg:ml-8 lg:max-w-xs"
@@ -77,27 +77,3 @@ const permalink = `${Astro.site!.href}about`;
     </p>
   </div>
 </BaseLayout>
-
-<!-- <style>
-  .about-image {
-    float: right;
-    margin: -3em -7em 2em 2em;
-    max-width: 300px;
-    @apply float-right -mt-12 -mr-28 mb-8 ml-8 max-w-xs;
-  }
-
-  .about-image img {
-    border-radius: 8px;
-    margin-bottom: 1.5em;
-    @apply rounded-lg mb-6;
-  }
-
-  @media (max-width: 1020px) {
-    .about-image {
-      float: none;
-      margin: 0 auto 2em;
-
-      @apply mx-auto mb-8;
-    }
-  }
-</style> -->

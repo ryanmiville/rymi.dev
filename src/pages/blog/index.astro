@@ -18,19 +18,19 @@ const posts = (await getCollection("blog")).sort(
   permalink={permalink}
   current="blog"
 >
-  <div class="container">
+  <div class="container prose dark:prose-invert">
     <h1>Blog</h1>
     {
       posts.map((post, index) => {
         const href = `/blog/${post.slug}`;
         return (
           <div>
-            {index !== 0 && <hr class="my-14 m-auto max-w-full" />}
+            {index !== 0 && <hr class="my-8 m-auto max-w-full not-prose" />}
             <div>
-              <h2>
+              <h2 class="not-prose">
                 <a href={href}>{post.data.title}</a>
               </h2>
-              <p>{post.data.description}</p>
+              <p class="">{post.data.description}</p>
               <div class="font-bold">
                 <span class="text-left uppercase mr-4 text-[--text-2]">
                   — <FormattedDate date={post.data.publishDate} />

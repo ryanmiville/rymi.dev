@@ -28,7 +28,7 @@ const permalink = `${Astro.site!.href}blog/${slug}`;
 >
   <header class="text-center">
     <!-- <p>{publishDate} ~ {readingTime}</p> -->
-    <p class="text-[--text-secondary] uppercase font-semibold">
+    <p class="text-[--text-2] uppercase font-semibold">
       <FormattedDate date={publishDate} />
     </p>
     <h1 class="mb-3">{title}</h1>
@@ -53,7 +53,7 @@ const permalink = `${Astro.site!.href}blog/${slug}`;
   } */
 
   /* header p {
-    color: var(--text-secondary);
+    color: var(--text-2);
     text-transform: uppercase;
     font-family: var(--font-family-sans);
     font-weight: 600;

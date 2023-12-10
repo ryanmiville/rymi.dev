@@ -32,7 +32,7 @@ const posts = (await getCollection("blog")).sort(
               </h2>
               <p>{post.data.description}</p>
               <div class="font-bold">
-                <span class="text-left uppercase mr-4 text-[--text-secondary]">
+                <span class="text-left uppercase mr-4 text-[--text-2]">
                   — <FormattedDate date={post.data.publishDate} />
                 </span>
               </div>
@@ -52,7 +52,7 @@ const posts = (await getCollection("blog")).sort(
   }
 
   .post-item-date {
-    color: var(--text-secondary);
+    color: var(--text-2);
     text-align: left;
     text-transform: uppercase;
     margin-right: 16px;

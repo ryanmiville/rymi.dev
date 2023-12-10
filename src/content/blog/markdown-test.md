@@ -4,7 +4,7 @@ publishDate: 01 Dec 2021
 description: A sample page with the most common elements of an article, including headings, paragraphs, lists, and images. Use it as a starting point for applying your own styles.
 ---
 
-![Illustration of woman using a computer receiving likes](/assets/blog/casual-life-3d-likes.webp)
+![Illustration of woman using a computer receiving likes](/assets/blog/3d-window-code.png)
 
 This page is an adapted version of [markdown-test-page](https://github.com/fullpipe/markdown-test-page). It should give you an idea of how different elements are styled on this template.
 

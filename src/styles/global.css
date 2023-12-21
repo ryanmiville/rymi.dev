@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --bg: theme('colors.slate.100');
-  --text: theme('colors.gray.800');
-  --text-2: theme('colors.gray.600');
-  --accent: theme('colors.purple.400');
+  --bg: theme('colors.slate.900');
+  --text: theme('colors.slate.200');
+  --text-2: theme('colors.slate.400');
+	--accent: theme('colors.purple.400');
 }
 
 :root.theme-dark {

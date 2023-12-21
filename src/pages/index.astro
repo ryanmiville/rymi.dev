@@ -10,33 +10,15 @@ const permalink = Astro.site!.href;
   <div
     class="flex-col md:flex-row items-center flex justify-center my-8 min-h-[400px]"
   >
-    <div class="pb-8 text-center md:flex-1 md:px-4 md:text-start">
+    <div class="pb-8 text-center md:flex-1 md:px-4">
       <p class="font-mono font-semibold text-2xl">Hi, I&apos;m</p>
       <h1
-        class="text-7xl bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-orange-200 to-orange-200 font-bold"
+        class="text-7xl bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-orange-200 font-bold inline-block"
       >
         Ryan Miville
       </h1>
       <p class="text-4xl font-semibold">
         Backend Web Developer and Data Engineer
-      </p>
-    </div>
-
-    <div class="mx-4 text-center">
-      <picture class="block min-h-[250px]">
-        <source srcset="/assets/home-waving.png" media="(min-width: 600px)" />
-        <img
-          class="w-full xl:max-w-xl mb-4 md:max-w-sm"
-          alt="Illustration of person reading a book"
-          src="/assets/home-waving.png"
-          width="550"
-          height="466"
-        />
-      </picture>
-      <p class="text-xs italic text-left">
-        Illustration by <a
-          href="https://icons8.com/illustrations/author/zD2oqC8lLBBA">Icons 8</a
-        > from <a href="https://icons8.com/illustrations">Ouch!</a>
       </p>
     </div>
   </div>

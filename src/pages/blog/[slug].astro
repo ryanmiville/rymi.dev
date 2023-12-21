@@ -1,6 +1,5 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
-import Bio from "../../components/Bio.astro";
 import FormattedDate from "../../components/FormattedDate.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
@@ -42,6 +41,5 @@ const permalink = `${Astro.site!.href}blog/${slug}`;
       <Content />
     </article>
     <hr class="my-5" />
-    <Bio />
   </div>
 </BaseLayout>

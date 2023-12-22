@@ -10,16 +10,24 @@ const permalink = Astro.site!.href;
   <div
     class="flex-col md:flex-row items-center flex justify-center my-8 min-h-[400px]"
   >
-    <div class="pb-8 text-center md:flex-1 md:px-4">
+    <div class="pb-8 text-center md:flex-1 md:px-4 md:text-start">
       <p class="font-mono font-semibold text-2xl">Hi, I&apos;m</p>
       <h1
         class="text-7xl bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-orange-200 font-bold inline-block"
       >
         Ryan Miville
       </h1>
-      <p class="text-4xl font-semibold">
-        Backend Web Developer and Data Engineer
-      </p>
+    </div>
+
+    <div class="mx-4 text-center text-3xl font-semibold md:text-justify">
+      <p>I am a</p>
+      <p class="text-teal-400">father 👨‍🍼<jj:wa></jj:wa></p>
+      <p class="text-rose-400">husband 🤵‍♂️</p>
+      <span>wannabe</span><span class="text-lime-400"> artist 🎨</span><span>
+        and</span
+      ><span class="text-orange-200"> musician 🎸</span>
+      <p>and</p><span class="text-purple-400"> software engineer 👨‍💻</span>
+      <p>...Most of the content here is focused on that last bit.</p>
     </div>
   </div>
 </BaseLayout>

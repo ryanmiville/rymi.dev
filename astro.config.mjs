@@ -7,9 +7,12 @@ import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind({
-		applyBaseStyles: false,
-	}), mdx(), react()],
+  integrations: [
+		tailwind({
+			applyBaseStyles: false,
+		}),
+	  mdx(), 
+	  react()],
   output: "server",
   adapter: vercel()
 });

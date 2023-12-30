@@ -28,7 +28,7 @@ const { title, description } = Astro.props;
 
     <script>
       document.addEventListener("astro:page-load", () => {
-        const getThemePreference = () => {
+        const theme = (() => {
           if (
             typeof localStorage !== "undefined" &&
             localStorage.getItem("theme")
@@ -38,9 +38,7 @@ const { title, description } = Astro.props;
           return window.matchMedia("(prefers-color-scheme: dark)").matches
             ? "dark"
             : "light";
-        };
-        const theme = getThemePreference();
-        const isDark = getThemePreference() === "dark";
+        })();
         if (theme === "light") {
           document.documentElement.classList.remove("dark");
         } else {

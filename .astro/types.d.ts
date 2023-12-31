@@ -184,7 +184,16 @@ declare module 'astro:content' {
 	>;
 
 	type ContentEntryMap = {
-		
+		"blog": {
+"markdown-test.md": {
+	id: "markdown-test.md";
+  slug: "markdown-test";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+};
+
 	};
 
 	type DataEntryMap = {
@@ -193,5 +202,5 @@ declare module 'astro:content' {
 
 	type AnyEntryMap = ContentEntryMap & DataEntryMap;
 
-	type ContentConfig = never;
+	type ContentConfig = typeof import("../src/content/config");
 }

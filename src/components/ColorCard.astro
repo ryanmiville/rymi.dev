@@ -1,0 +1,19 @@
+---
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+const titleName = name.charAt(0).toUpperCase() + name.slice(1);
+---
+
+<Card className={" mb-4 bg-" + name}>
+  <CardHeader>
+    <CardTitle>
+      <span class=`text-3xl font-bold text-${name}-foreground`>{titleName}</span
+      >
+    </CardTitle>
+  </CardHeader>
+</Card>

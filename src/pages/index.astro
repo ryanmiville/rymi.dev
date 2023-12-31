@@ -1,0 +1,41 @@
+---
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Layout from "@/layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const title = "Ryan Miville";
+const description = "Web developer and data engineer.";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => a.data.publishDate.valueOf() - b.data.publishDate.valueOf()
+);
+---
+
+<Layout title={title} description={description}>
+  {
+    posts.map((post, index) => {
+      const href = `/blog/${post.slug}`;
+      return (
+        <a href={href}>
+          <Card className="bg-primary-foreground/40 backdrop-blur-md">
+            <CardHeader>
+              <CardTitle>{post.data.title}</CardTitle>
+              <CardDescription>
+                {post.data.publishDate.toDateString()}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>{post.data.description}</p>
+            </CardContent>
+          </Card>
+        </a>
+      );
+    })
+  }
+</Layout>

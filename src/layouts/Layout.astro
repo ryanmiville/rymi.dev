@@ -1,0 +1,73 @@
+---
+import Navbar from "@/components/Navbar.astro";
+import "@/styles/global.css";
+import "@fontsource-variable/inter";
+
+import { ViewTransitions } from "astro:transitions";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+
+    <ViewTransitions />
+
+    <script>
+      document.addEventListener("astro:page-load", () => {
+        const theme = (() => {
+          if (
+            typeof localStorage !== "undefined" &&
+            localStorage.getItem("theme")
+          ) {
+            return localStorage.getItem("theme");
+          }
+          return window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        })();
+        if (theme === "light") {
+          document.documentElement.classList.remove("dark");
+        } else {
+          document.documentElement.classList.add("dark");
+        }
+      });
+    </script>
+    <script>
+      document.addEventListener("astro:after-swap", () => {
+        localStorage.theme === "dark"
+          ? document.documentElement.classList.add("dark")
+          : document.documentElement.classList.add("light");
+      });
+    </script>
+  </head>
+  <body>
+    <div
+      class="bg-fuchsia-200 absolute top-[-6rem] -z-10 right-[11rem] h-[31.25rem] w-[31.25rem] rounded-full blur-[10rem] sm:w-[68.75rem] dark:bg-fuchsia-800"
+    >
+    </div>
+    <div
+      class="bg-teal-100 absolute top-[-1rem] -z-10 left-[-35rem] h-[31.25rem] w-[50rem] rounded-full blur-[10rem] sm:w-[68.75rem] md:left-[-33rem] lg:left-[-28rem] xl:left-[-15rem] 2xl:left-[-5rem] dark:bg-teal-900"
+    >
+    </div>
+    <div class="max-w-3xl mx-auto px-4">
+      <Navbar />
+      <main>
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

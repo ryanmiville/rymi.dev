@@ -1,0 +1,17 @@
+---
+import ColorCard from "@/components/ColorCard.astro";
+import Layout from "@/layouts/Layout.astro";
+
+const title = "Colors";
+const description = "Shadcn/UI color pallette";
+---
+
+<Layout title={title} description={description}>
+  <ColorCard name="card" />
+  <ColorCard name="popover" />
+  <ColorCard name="primary" />
+  <ColorCard name="secondary" />
+  <ColorCard name="muted" />
+  <ColorCard name="accent" />
+  <ColorCard name="destructive" />
+</Layout>

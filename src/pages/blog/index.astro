@@ -9,21 +9,22 @@ import {
 import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
-const title = "Ryan Miville";
-const description = "Web developer and data engineer.";
+const title = "Blog";
+const description = "Latest articles.";
 
 const posts = (await getCollection("blog")).sort(
   (a, b) => a.data.publishDate.valueOf() - b.data.publishDate.valueOf()
 );
 ---
 
-<Layout title={title} description={description}>
+<Layout title="" description="">
+  <h1 class="text-4xl font-extrabold pb-8">Blog</h1>
   {
     posts.map((post, index) => {
       const href = `/blog/${post.slug}`;
       return (
         <a href={href}>
-          <Card className="bg-primary-foreground/40 backdrop-blur-md">
+          <Card>
             <CardHeader>
               <CardTitle>{post.data.title}</CardTitle>
               <CardDescription>

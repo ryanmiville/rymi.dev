@@ -25,33 +25,27 @@ const { title, description } = Astro.props;
     <meta name="description" content={description} />
 
     <ViewTransitions />
-
-    <script>
-      document.addEventListener("astro:page-load", () => {
-        const theme = (() => {
-          if (
-            typeof localStorage !== "undefined" &&
-            localStorage.getItem("theme")
-          ) {
-            return localStorage.getItem("theme");
-          }
-          return window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light";
-        })();
-        if (theme === "light") {
-          document.documentElement.classList.remove("dark");
-        } else {
-          document.documentElement.classList.add("dark");
+    <script is:inline>
+      const theme = (() => {
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme");
         }
-      });
-    </script>
-    <script>
-      document.addEventListener("astro:after-swap", () => {
-        localStorage.theme === "dark"
-          ? document.documentElement.classList.add("dark")
-          : document.documentElement.classList.add("light");
-      });
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+        return "light";
+      })();
+
+      if (theme === "light") {
+        document.documentElement.classList.remove("dark");
+      } else {
+        document.documentElement.classList.add("dark");
+      }
+
+      window.localStorage.setItem("theme", theme);
     </script>
   </head>
   <body>

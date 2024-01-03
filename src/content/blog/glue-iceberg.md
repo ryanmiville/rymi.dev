@@ -1,0 +1,347 @@
+---
+title: Using Apache Iceberg in AWS Glue Jobs
+publishDate: 2 Jan 2024
+description: A guide to optimally using Apache Iceberg in AWS Glue jobs.
+---
+
+# What is Apache Iceberg?
+
+Apache iceberg is a data lake file format that provides features including ACID transactions and snapshot history. By default, it saves data as parquet, along with metadata files that the iceberg library uses to enable its features.
+
+Iceberg should be your default format for new tables in the data lake. Even if you don't need the features it provides, it is still a good choice because it is a standard format with first-class support from several AWS services and Spark.
+
+Iceberg requires Glue 3.0 or later. Glue 4.0 is the latest version at the time of writing.
+
+# Creating Iceberg Tables in Glue
+
+First, make sure that your table's database has a default location. Your table does not need to be in the default location, but the iceberg library works smoother if the database has a default location nonetheless. You can set this in terraform.
+
+```diff
+resource "aws_glue_catalog_database" "example" {
+  name         = "example"
++ location_uri = "s3://service-bucket/example"
+}
+```
+
+## Table Properties
+
+The default settings are not optimal for ACID transactions. The table will quickly grow to so many files that Glue jobs will fail due to S3 slow down errors. Here are the settings we have found that limit the number of files created:
+
+```
+'table_type' = 'ICEBERG',
+'format-version' = '2',
+'format' = 'parquet',
+'write_compression' = 'snappy',
+'vacuum_min_snapshots_to_keep' = '2',
+'write.target-file-size-bytes' = '536870912',
+'write.distribution-mode' = 'hash'
+```
+
+> Note: `vacuum_min_snapshots_to_keep` depends on your use case. This is discussed in more detail below.
+
+## Picking a Tool to Create the Table
+
+If you create an iceberg table in the Athena console, it will add a bunch of prefixes in the s3 location to optimize Athena queries. If this fits your use case, then I suggest you create a saved Athena query in terraform.
+
+```hcl
+resource "aws_athena_named_query" "my_table" {
+  database  = aws_glue_catalog_database.example.name
+  workgroup = aws_athena_workgroup.example.name
+  name      = "create_table_my_table"
+  query     = <<QUERY
+CREATE TABLE
+ IF NOT EXISTS example.my_table (
+	id bigint,
+	name string,
+	city string,
+	size bigint,
+	categories array<string>,
+	date string
+) PARTITIONED BY (date) LOCATION 's3://service-bucket/example/my_table' TBLPROPERTIES (
+	'table_type' = 'ICEBERG',
+	'format-version' = '2',
+	'format' = 'parquet',
+	'write_compression' = 'snappy',
+	'vacuum_min_snapshots_to_keep' = '2',
+	'write.target-file-size-bytes' = '536870912',
+	'write.distribution-mode' = 'hash'
+)
+	QUERY
+}
+```
+
+This strategy hurts Spark performance. If your table will be regularly used in Spark jobs, stick to creating the table in Spark. I have my table DDLs saved in git, and I run them in a Jupyter notebook.
+
+In general, I recommend creating the table in Spark. It is more flexible, and Athena still works fine with tables created in Spark.
+
+```python
+spark.sql("""
+CREATE TABLE
+ IF NOT EXISTS example.my_table (
+	id bigint,
+	name string,
+	city string,
+	size bigint,
+	categories array<string>,
+	date string
+) USING iceberg PARTITIONED BY (date) TBLPROPERTIES (
+	'table_type' = 'ICEBERG',
+	'format-version' = '2',
+	'format' = 'parquet',
+	'write_compression' = 'snappy',
+	'vacuum_min_snapshots_to_keep' = '2',
+	'write.target-file-size-bytes' = '536870912',
+	'write.distribution-mode' = 'hash'
+)
+""")
+```
+
+# Spark Configuration
+
+There are two routes you can go to enable iceberg support in your Glue jobs. You can use a job parameter to enable iceberg support, or add the depenedencies yourself.
+
+**Pros to using a job parameter**:
+
+- AWS docs assume this option. The docs will always reference the same iceberg version.
+- Less room for human error. You don't need to worry about choosing compatible jars for your Glue and Spark versions.
+
+**Cons to using a job parameter**:
+
+- You can't use the latest version of iceberg.
+- Spark configuration is a little more complicated.
+- Querying iceberg tables is a little less ergonomic.
+
+I have recently switched to managing the iceberg dependencies myself. If you are less comfortable with Spark, feel free to use the job parameter.
+
+## Using a Job Parameter
+
+Add the following parameter to your job in terraform:
+
+```diff
+resource "aws_glue_job" "job" {
+	# ...
+	glue_version = "4.0"
+
+	default_arguments = {
+		# ...
++		"--datalake-formats"        = "iceberg"
+		"--enable-glue-datacatalog" = true
+	}
+}
+```
+
+This will include iceberg 1.0.0 in your job. You need to set a few Spark configuration options to enable iceberg support.
+
+In 1.0.0, you must access iceberg tables using a qualified catalog name. The name does not matter. This is a little annoying, but not a big deal. The Glue docs tend to use `glue_catalog` as the catalog name, so I will use that in examples.
+
+You must also specify a warehouse location. This is where iceberg will store its metadata if the table does not already have a location set. The Glue database default location takes precedence over this setting. I recommend setting the warehouse location to the same location as the database default location. If you are accessing iceberg tables from more than one database, you can create multiple catalogs per database. However, this is not necessary if your databases have their default locations set.
+
+```python
+spark = SparSession.builder \
+	.config("spark.sql.catalog.glue_catalog", "org.apache.iceberg.spark.SparkCatalog") \
+	.config("spark.sql.catalog.glue_catalog.catalog-impl", "org.apache.iceberg.aws.glue.GlueCatalog") \
+	.config("spark.sql.catalog.glue_catalog.io-impl", "org.apache.iceberg.aws.s3.S3FileIO") \
+	.config("spark.sql.catalog.glue_catalog.warehouse", "s3://service-bucket/example") \
+	.config("spark.sql.extensions", "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions") \
+	.getOrCreate()
+```
+
+If you are using Scala, the [scala-toolkit](https://github.com/GetTerminus/scala-toolkit) library has a helper function to create configs for iceberg support.
+
+```scala
+import terminus.toolkit.spark.IcebergConfig
+
+val warehouse = "s3://service-bucket/example"
+val name = "glue_catalog"
+val conf = IcebergConfig(warehouse, name)
+val sparkConf = IcebergConfig.generateSparkConfigs(List(ic)).get
+
+implicit val spark = SparkSession
+	.builder()
+	.config(new SparkConf().setAll(cfgs))
+	.getOrCreate()
+```
+
+Now you can access iceberg tables using the catalog name.
+
+```python
+my_table = spark.table("glue_catalog.example.my_table")
+```
+
+## Self-Managed Dependencies
+
+If you want to use the latest version of iceberg, you need to manage the dependencies yourself. This is not too difficult, especially in Scala.
+
+Regardless of your language, **DO NOT** set `datalake-formats = iceberg` in your job parameters. This will cause the versions to clash.
+
+You still need `enable-glue-datacatalog` set to true.
+
+### Scala
+
+If you are using Scala, just add the following to your `libraryDependencies` in build.sbt:
+
+```scala
+"org.apache.iceberg" % "iceberg-aws-bundle"         % "<ICEBERG_VERSION>",
+"org.apache.iceberg" %% "iceberg-spark-runtime-3.3" % "<ICEBERG_VERSION>",
+```
+
+### Python
+
+Unfortunately, python jobs require more work. You need to download the jars and add them to S3. Then you include them in your job with the `--extra-jars` parameter. You can download the jars from maven central. I have included links to the latest version of iceberg at the time of writing.
+
+- [iceberg-spark-runtime-3.3](https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.3_2.12/1.4.3/iceberg-spark-runtime-3.3_2.12-1.4.3.jar)
+- [iceberg-aws-bundle](https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-aws-bundle/1.4.3/iceberg-aws-bundle-1.4.3.jar)
+
+After uploading to S3, update your job in terraform:
+
+```diff
+resource "aws_glue_job" "job" {
+	# ...
+	glue_version = "4.0"
+
+	default_arguments = {
+		# ...
+-		"--datalake-formats"        = "iceberg"
++		"--extra-jars"              = "s3://service-bucket/jars/iceberg-spark-runtime-3.3_2.12-1.4.3.jar,s3://service-bucket/jars/iceberg-aws-bundle-1.4.3.jar"
+		"--enable-glue-datacatalog" = "true"
+	}
+}
+```
+
+Now that you have your dependencies added, set these configs in your Spark session:
+
+```python
+spark = SparSession.builder \
+	.config("spark.sql.catalog.spark_catalog", "org.apache.iceberg.spark.SparkSessionCatalog") \
+	.config("spark.sql.catalog.spark_catalog.catalog-impl", "org.apache.iceberg.aws.glue.GlueCatalog") \
+	.config("spark.sql.catalog.spark_catalog.io-impl", "org.apache.iceberg.aws.s3.S3FileIO") \
+	.config("spark.sql.extensions", "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions") \
+	.getOrCreate()
+```
+
+The nice thing is that these do not require a separate, named catalog. Assuming your databases have a default location set, you do not need to provide a warehouse either. These values can be copied and pasted from job-to-job without any modifications.
+
+You can access iceberg tables like any other table in the Glue catalog now.
+
+```python
+spark.table("example.my_table")
+```
+
+It is a minor thing, but it is nice to treat all tables the same. This way you don't need to know which tables are iceberg and which are not.
+
+# Maintenance
+
+Iceberg provides procedures to perform regular maintenance on your tables.
+
+## Rewrite Data Files
+
+Your job may output files in a way that make downstream processes less performant. To optimize the files, you can run the `rewrite_data_files` procedure. Here are some options we’ve found to work well:
+
+```python
+spark.sql("""
+  CALL system.rewrite_data_files(
+    table => 'example.my_table',
+    options => map(
+      'max-concurrent-file-group-rewrites', '100',
+      'partial-progress.enabled', 'true',
+
+      # This option is good for merge operations, otherwise leave it off
+      'rewrite-all', 'true'
+    )
+  )
+""")
+```
+
+> Note: These examples assume you're managing iceberg dependencies yourself. If you are using the job parameter, you need to use the qualified catalog name after `system.` (e.g. `system.glue_catalog.rewrite_data_files`).
+
+**A good default is to rewrite data files once a day during off-peak hours**. We have some batch processes that run once every night and they immediately run the procedure in the same Spark job after writing to the table.
+
+If your table is append-only, you may not benefit from this procedure if you already manage your file count when you write data.
+
+### Extra Options
+
+If you know that your table will often be filtered by a column that is not a partition, you can optimize the files for that filter:
+
+```diff
+spark.sql("""
+  CALL system.rewrite_data_files(
+    table => 'example.my_table',
+    options => map(
+      'max-concurrent-file-group-rewrites', '100',
+      'partial-progress.enabled', 'true',
+    ),
++   strategy => 'sort',
++   sort_order => 'zorder(city, size)'
+  )
+""")
+```
+
+You can also supply a filter to only rewrite files that may contain data that matches:
+
+```diff
+spark.sql("""
+  CALL system.rewrite_data_files(
+    table => 'example.my_table',
+    options => map(
+      'max-concurrent-file-group-rewrites', '100',
+      'partial-progress.enabled', 'true',
+    ),
++   where => 'date > "2023-12-15"'
+  )
+""")
+```
+
+## Expire Snapshots
+
+ACID operations create extra files in the table. These files do not affect query performance, but they do incur a storage cost. Iceberg saves snapshots of your table, and allows the user to _time travel_ to previous snapshots. The storage cost vs. utility of snapshots will depend on your particular use case. The default behavior is to prevent deletion of snapshots younger than 7 days old.
+
+Eventually you will need to expire snapshots that are no longer useful:
+
+```python
+spark.sql("CALL system.expire_snapshots('example.my_table')")
+```
+
+You can delete snapshots older than a specific date, but it will not allow a timestamp within the last 48 hours:
+
+```diff
+spark.sql("""
+	CALL system.expire_snapshots(
+		table => 'example.my_table',
++		older_than => TIMESTAMP '2023-12-01 00:00:00.000'
+	)
+""")
+```
+
+Depending on your storage costs, you don't need to expire snapshots too aggressively. **A good default is to expire snapshots once a month**.
+
+Again, if your table is append-only, you may not benefit much from this procedure. It would only delete metadata files.
+
+## Orphan Files
+
+Files that are no longer referenced by any metadata files, and are therefore useless, are called orphan files. You should occasionally delete these as well:
+
+```python
+spark.sql("CALL system.remove_orphan_files(table => 'example.my_table')")
+```
+
+**A good default is to remove orphan files when you expire snapshots**. If you do substantial data file rewrites, you may want to do this more often.
+
+# Writing Data in Spark
+
+Iceberg uses Spark's DataSource V2 API. If you are used to writing data directly to an S3 location, you will need to make some changes.
+
+When you write to an existing table, you do not need to know the location or partitioning scheme. You can just write to the table by name:
+
+```python
+df.writeTo("example.my_table").overwritePartitions()
+```
+
+`overwritePartitions()` will overwrite all the data in partitions of the table that exist in the dataframe. For example, if the dataframe contains rows where `date = '2023-12-14`, all existing data within that partition will be deleted.
+
+I find this to be my most used method. It also works fine if you are writing to a partition that does not exist yet (e.g. running a daily job that adds a new `date` partition value). If the table is not partitioned at all, it will overwrite the entire table.
+
+Other methods include:
+
+- `overwrite(condition)` - Overwrite all data in the table matching a condition.
+- `replace()` - Overwrite the entire table, keeping the same schema.
+- `append()` - Append data to the table.

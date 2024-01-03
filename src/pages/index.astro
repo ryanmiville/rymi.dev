@@ -23,7 +23,7 @@ const posts = (await getCollection("blog")).sort(
       const href = `/blog/${post.slug}`;
       return (
         <a href={href}>
-          <Card className="bg-card/40 backdrop-blur-md mb-4">
+          <Card className="bg-card/50 backdrop-blur-md backdrop-saturate-150 mb-4">
             <CardHeader>
               <CardTitle>{post.data.title}</CardTitle>
               <CardDescription>

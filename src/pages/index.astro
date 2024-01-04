@@ -19,7 +19,7 @@ const posts = (await getCollection("blog")).sort(
 
 <Layout title={title} description={description}>
   {
-    posts.map((post, index) => {
+    posts.map((post) => {
       const href = `/blog/${post.slug}`;
       return (
         <a href={href}>

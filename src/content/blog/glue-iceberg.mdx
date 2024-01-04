@@ -30,7 +30,7 @@ resource "aws_glue_catalog_database" "example" {
 
 The default settings are not optimal for ACID transactions. The table will quickly grow to so many files that Glue jobs will fail due to S3 slow down errors. Here are the settings we have found that limit the number of files created:
 
-```
+```sql
 'table_type' = 'ICEBERG',
 'format-version' = '2',
 'format' = 'parquet',

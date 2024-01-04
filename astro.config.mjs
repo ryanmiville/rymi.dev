@@ -13,4 +13,4 @@ export default defineConfig({
   }), react(), expressiveCode(), mdx()],
   output: "server",
   adapter: vercel()
-});
+}); 

@@ -16,10 +16,10 @@ Iceberg requires Glue 3.0 or later. Glue 4.0 is the latest version at the time o
 
 First, make sure that your table's database has a default location. Your table does not need to be in the default location, but the iceberg library works smoother if the database has a default location nonetheless. You can set this in terraform.
 
-```diff
+```hcl ins={3}
 resource "aws_glue_catalog_database" "example" {
   name         = "example"
-+ location_uri = "s3://service-bucket/example"
+  location_uri = "s3://service-bucket/example"
 }
 ```
 
@@ -117,14 +117,14 @@ I have recently switched to managing the iceberg dependencies myself. If you are
 
 Add the following parameter to your job in terraform:
 
-```diff
+```hcl ins={7}
 resource "aws_glue_job" "job" {
 	# ...
 	glue_version = "4.0"
 
 	default_arguments = {
 		# ...
-+		"--datalake-formats"        = "iceberg"
+		"--datalake-formats"        = "iceberg"
 		"--enable-glue-datacatalog" = true
 	}
 }
@@ -194,15 +194,15 @@ Unfortunately, python jobs require more work. You need to download the jars and 
 
 After uploading to S3, update your job in terraform:
 
-```diff
+```hcl del={7} ins={8}
 resource "aws_glue_job" "job" {
 	# ...
 	glue_version = "4.0"
 
 	default_arguments = {
 		# ...
--		"--datalake-formats"        = "iceberg"
-+		"--extra-jars"              = "s3://service-bucket/jars/iceberg-spark-runtime-3.3_2.12-1.4.3.jar,s3://service-bucket/jars/iceberg-aws-bundle-1.4.3.jar"
+		"--datalake-formats"        = "iceberg"
+		"--extra-jars"              = "s3://service-bucket/jars/iceberg-spark-runtime-3.3_2.12-1.4.3.jar,s3://service-bucket/jars/iceberg-aws-bundle-1.4.3.jar"
 		"--enable-glue-datacatalog" = "true"
 	}
 }
@@ -262,7 +262,7 @@ If your table is append-only, you may not benefit from this procedure if you alr
 
 If you know that your table will often be filtered by a column that is not a partition, you can optimize the files for that filter:
 
-```diff
+```hcl ins={8,9}
 spark.sql("""
   CALL system.rewrite_data_files(
     table => 'example.my_table',
@@ -270,15 +270,15 @@ spark.sql("""
       'max-concurrent-file-group-rewrites', '100',
       'partial-progress.enabled', 'true',
     ),
-+   strategy => 'sort',
-+   sort_order => 'zorder(city, size)'
+    strategy => 'sort',
+    sort_order => 'zorder(city, size)'
   )
 """)
 ```
 
 You can also supply a filter to only rewrite files that may contain data that matches:
 
-```diff
+```hcl ins={8}
 spark.sql("""
   CALL system.rewrite_data_files(
     table => 'example.my_table',
@@ -286,7 +286,7 @@ spark.sql("""
       'max-concurrent-file-group-rewrites', '100',
       'partial-progress.enabled', 'true',
     ),
-+   where => 'date > "2023-12-15"'
+    where => 'date > "2023-12-15"'
   )
 """)
 ```
@@ -303,11 +303,11 @@ spark.sql("CALL system.expire_snapshots('example.my_table')")
 
 You can delete snapshots older than a specific date, but it will not allow a timestamp within the last 48 hours:
 
-```diff
+```hcl ins={4}
 spark.sql("""
 	CALL system.expire_snapshots(
 		table => 'example.my_table',
-+		older_than => TIMESTAMP '2023-12-01 00:00:00.000'
+ 		older_than => TIMESTAMP '2023-12-01 00:00:00.000'
 	)
 """)
 ```

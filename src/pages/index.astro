@@ -25,7 +25,9 @@ const posts = (await getCollection("blog")).sort(
         <a href={href}>
           <Card className="bg-card/50 backdrop-blur-md backdrop-saturate-150 mb-4">
             <CardHeader>
-              <CardTitle>{post.data.title}</CardTitle>
+              <CardTitle>
+                <span transition:name={post.data.title}>{post.data.title}</span>
+              </CardTitle>
               <CardDescription>
                 {post.data.publishDate.toDateString()}
               </CardDescription>

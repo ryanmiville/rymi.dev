@@ -22,7 +22,7 @@ const { title, description } = entry.data;
 
 <Layout title={title} description={description}>
   <article class="prose dark:prose-invert">
-    <h1>{title}</h1>
+    <h1 transition:name={title}>{title}</h1>
     <Content />
   </article>
 </Layout>

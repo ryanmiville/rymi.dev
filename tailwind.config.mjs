@@ -18,7 +18,7 @@ export default {
     },
     extend: {
 			fontFamily: {
-        sans: ["InterVariable", "Inter", ...defaultTheme.fontFamily.sans],
+        sans: ['"Inter Variable"', ...defaultTheme.fontFamily.sans],
       },
       colors: {
         border: "hsl(var(--border))",

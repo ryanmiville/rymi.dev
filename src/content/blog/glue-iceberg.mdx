@@ -7,7 +7,7 @@ description: A guide to optimally using Apache Iceberg in AWS Glue jobs.
 import LanguageTabs from "@/components/LanguageTabs";
 
 
-# What is Apache Iceberg?
+## What is Apache Iceberg?
 
 Apache iceberg is a data lake file format that provides features including ACID transactions and snapshot history. By default, it saves data as parquet, along with metadata files that the iceberg library uses to enable its features.
 
@@ -15,7 +15,7 @@ Iceberg should be your default format for new tables in the data lake. Even if y
 
 Iceberg requires Glue 3.0 or later. Glue 4.0 is the latest version at the time of writing.
 
-# Creating Iceberg Tables in Glue
+## Creating Iceberg Tables in Glue
 
 First, make sure that your table's database has a default location. Your table does not need to be in the default location, but the iceberg library works smoother if the database has a default location nonetheless. You can set this in terraform.
 
@@ -26,7 +26,7 @@ resource "aws_glue_catalog_database" "example" {
 }
 ```
 
-## Table Properties
+### Table Properties
 
 The default settings are not optimal for ACID transactions. The table will quickly grow to so many files that Glue jobs will fail due to S3 slow down errors. Here are the settings we have found that limit the number of files created:
 
@@ -42,7 +42,7 @@ The default settings are not optimal for ACID transactions. The table will quick
 
 > Note: `vacuum_min_snapshots_to_keep` depends on your use case. This is discussed in more detail below.
 
-## Picking a Tool to Create the Table
+### Picking a Tool to Create the Table
 
 If you create an iceberg table in the Athena console, it will add a bunch of prefixes in the s3 location to optimize Athena queries. If this fits your use case, then I suggest you create a saved Athena query in terraform.
 
@@ -99,7 +99,7 @@ CREATE TABLE
 """)
 ```
 
-# Spark Configuration
+## Spark Configuration
 
 There are two routes you can go to enable iceberg support in your Glue jobs. You can use a job parameter to enable iceberg support, or add the depenedencies yourself.
 
@@ -116,7 +116,7 @@ There are two routes you can go to enable iceberg support in your Glue jobs. You
 
 I have recently switched to managing the iceberg dependencies myself. If you are less comfortable with Spark, feel free to use the job parameter.
 
-## Using a Job Parameter
+### Using a Job Parameter
 
 Add the following parameter to your job in terraform:
 
@@ -193,7 +193,7 @@ You must also specify a warehouse location. This is where iceberg will store its
 	</div>
 </LanguageTabs>
 
-## Self-Managed Dependencies
+### Self-Managed Dependencies
 
 If you want to use the latest version of iceberg, you need to manage the dependencies yourself. This is not too difficult, especially in Scala.
 
@@ -268,11 +268,11 @@ spark.table("example.my_table")
 
 It is a minor thing, but it is nice to treat all tables the same. This way you don't need to know which tables are iceberg and which are not.
 
-# Maintenance
+## Maintenance
 
 Iceberg provides procedures to perform regular maintenance on your tables.
 
-## Rewrite Data Files
+### Rewrite Data Files
 
 Your job may output files in a way that make downstream processes less performant. To optimize the files, you can run the `rewrite_data_files` procedure. Here are some options we’ve found to work well:
 
@@ -297,7 +297,7 @@ spark.sql("""
 
 If your table is append-only, you may not benefit from this procedure if you already manage your file count when you write data.
 
-### Extra Options
+#### Extra Options
 
 If you know that your table will often be filtered by a column that is not a partition, you can optimize the files for that filter:
 
@@ -330,7 +330,7 @@ spark.sql("""
 """)
 ```
 
-## Expire Snapshots
+### Expire Snapshots
 
 ACID operations create extra files in the table. These files do not affect query performance, but they do incur a storage cost. Iceberg saves snapshots of your table, and allows the user to _time travel_ to previous snapshots. The storage cost vs. utility of snapshots will depend on your particular use case. The default behavior is to prevent deletion of snapshots younger than 7 days old.
 
@@ -355,7 +355,7 @@ Depending on your storage costs, you don't need to expire snapshots too aggressi
 
 Again, if your table is append-only, you may not benefit much from this procedure. It would only delete metadata files.
 
-## Orphan Files
+### Orphan Files
 
 Files that are no longer referenced by any metadata files, and are therefore useless, are called orphan files. You should occasionally delete these as well:
 
@@ -365,7 +365,7 @@ spark.sql("CALL system.remove_orphan_files(table => 'example.my_table')")
 
 **A good default is to remove orphan files when you expire snapshots**. If you do substantial data file rewrites, you may want to do this more often.
 
-# Writing Data in Spark
+## Writing Data in Spark
 
 Iceberg uses Spark's DataSource V2 API. If you are used to writing data directly to an S3 location, you will need to make some changes.
 

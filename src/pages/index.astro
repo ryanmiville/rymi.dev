@@ -18,6 +18,18 @@ const posts = (await getCollection("blog")).sort(
 ---
 
 <Layout title={title} description={description}>
+  <div class="mt-16 mb-20">
+    <h1 class="font-extrabold text-4xl">
+      Hi, I'm <span class="text-primary">Ryan Miville</span>
+    </h1>
+    <div class="text-stone-700 dark:text-stone-300 mt-2 text-lg">
+      <p>
+        a software engineer with a focus on data-heavy apps and developer
+        experience. I'm also passionate about music and art. I occasionally try
+        to merge these things into something interesting.
+      </p>
+    </div>
+  </div>
   {
     posts.map((post) => {
       const href = `/blog/${post.slug}`;

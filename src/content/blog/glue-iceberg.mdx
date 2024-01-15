@@ -169,22 +169,6 @@ You must also specify a warehouse location. This is where iceberg will store its
 			.getOrCreate()
 		```
 
-		The [scala-toolkit](https://github.com/GetTerminus/scala-toolkit) library has a helper function to create configs for iceberg support.
-
-		```scala
-		import terminus.toolkit.spark.IcebergConfig
-
-		val warehouse = "s3://service-bucket/example"
-		val name = "glue_catalog"
-		val conf = IcebergConfig(warehouse, name)
-		val sparkConf = IcebergConfig.generateSparkConfigs(List(ic)).get
-
-		implicit val spark = SparkSession
-			.builder()
-			.config(new SparkConf().setAll(cfgs))
-			.getOrCreate()
-		```
-
 		Now you can access iceberg tables using the catalog name.
 
 		```scala

@@ -13,9 +13,9 @@
 		--accent-pink-2: hsl(318.6 62.5% 68.63%);
 		--accent-yellow: hsl(49.8 62.5% 68.63%);
 
-    --background: hsl(0 0% 100%);
+    --background: theme('colors.rose.50');
     --foreground: hsl(20 14.3% 4.1%);
-    --card: hsl(20 5.9% 90%);
+    --card: theme('colors.stone.50');
     --card-foreground: hsl(20 14.3% 4.1%);
     --popover: hsl(0 0% 100%);
     --popover-foreground: hsl(20 14.3% 4.1%);
@@ -36,9 +36,9 @@
   }
 
   .dark {
-    --background: hsl(20 14.3% 4.1%);
+    --background: theme('colors.stone.800');
     --foreground: hsl(60 9.1% 97.8%);
-    --card: hsl(12 6.5% 15.1%);
+    --card: theme('colors.stone.700');
     --card-foreground: hsl(60 9.1% 97.8%);
     --popover: hsl(20 14.3% 4.1%);
     --popover-foreground: hsl(60 9.1% 97.8%);

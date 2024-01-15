@@ -1,11 +1,5 @@
 ---
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import BlogCard from "@/components/BlogCard.astro";
 import Layout from "@/layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
@@ -19,9 +13,7 @@ const posts = (await getCollection("blog")).sort(
 
 <Layout title={title} description={description}>
   <div class="mt-16 mb-20">
-    <h1 class="font-extrabold text-4xl">
-      Hi, I'm <span class="text-primary">Ryan Miville</span>
-    </h1>
+    <h1 class="font-extrabold text-4xl">Hi, I'm Ryan Miville</h1>
     <div class="text-stone-700 dark:text-stone-300 mt-2 text-lg">
       <p>
         a software engineer with a focus on data-heavy apps and developer
@@ -35,19 +27,7 @@ const posts = (await getCollection("blog")).sort(
       const href = `/blog/${post.slug}`;
       return (
         <a href={href}>
-          <Card className="mb-4">
-            <CardHeader>
-              <CardTitle>
-                <span transition:name={post.data.title}>{post.data.title}</span>
-              </CardTitle>
-              <CardDescription>
-                {post.data.publishDate.toDateString()}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>{post.data.description}</p>
-            </CardContent>
-          </Card>
+          <BlogCard post={post} />
         </a>
       );
     })

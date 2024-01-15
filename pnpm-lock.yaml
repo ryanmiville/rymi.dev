@@ -20,9 +20,9 @@ dependencies:
   '@astrojs/vercel':
     specifier: ^6.1.1
     version: 6.1.1(astro@4.0.8)
-  '@fontsource-variable/inter':
-    specifier: ^5.0.16
-    version: 5.0.16
+  '@fontsource-variable/outfit':
+    specifier: ^5.0.8
+    version: 5.0.8
   '@preact/signals-react':
     specifier: ^2.0.0
     version: 2.0.0(react@18.2.0)
@@ -825,8 +825,8 @@ packages:
     resolution: {integrity: sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==}
     dev: false
 
-  /@fontsource-variable/inter@5.0.16:
-    resolution: {integrity: sha512-k+BUNqksTL+AN+o+OV7ILeiE9B5M5X+/jA7LWvCwjbV9ovXTqZyKRhA/x7uYv/ml8WQ0XNLBM7cRFIx4jW0/hg==}
+  /@fontsource-variable/outfit@5.0.8:
+    resolution: {integrity: sha512-j4JHCbuk2+Nl7PwTVT+RJKTDMDw7TWWt/85CIucD7KvOS7Iv0IiymE5ur21/aFbTwamOHrXX91WrQZHN7QDrmw==}
     dev: false
 
   /@img/sharp-darwin-arm64@0.33.1:

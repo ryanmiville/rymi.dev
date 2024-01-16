@@ -7,7 +7,7 @@ const title = "Ryan Miville";
 const description = "Web developer and data engineer.";
 
 const posts = (await getCollection("blog")).sort(
-  (a, b) => a.data.publishDate.valueOf() - b.data.publishDate.valueOf()
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
 );
 ---
 

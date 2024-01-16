@@ -185,16 +185,16 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"blog": {
-"glue-iceberg.mdx": {
-	id: "glue-iceberg.mdx";
-  slug: "glue-iceberg";
+"glue-iceberg-file-count.mdx": {
+	id: "glue-iceberg-file-count.mdx";
+  slug: "glue-iceberg-file-count";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".mdx"] };
-"markdown-test.mdx": {
-	id: "markdown-test.mdx";
-  slug: "markdown-test";
+"glue-iceberg.mdx": {
+	id: "glue-iceberg.mdx";
+  slug: "glue-iceberg";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">

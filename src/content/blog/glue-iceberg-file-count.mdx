@@ -8,13 +8,13 @@ import LanguageTabs from "@/components/LanguageTabs";
 
 ## What's the Problem?
 
-AWS is pushing Iceberg as the default format for data lake tables. It is a great format, but it is not without its quirks. One issue is that Iceberg tables can quickly grow to have tens, or even hundreds, of thousands of files. This can cause performance issues or even job failures due to S3 slow down errors.
+AWS is pushing Iceberg as the default format for data lake tables. It is a great format, but it is not without its quirks. One issue is that Iceberg tables can quickly grow to have hundreds of thousands of files. This can cause performance issues or job failures due to S3 slow down errors.
 
-## Why does this happen?
+## Why Does This Happen?
 
 It can happen for a number of reasons, but the most common is that the table is not configured properly. The default settings are not optimal for ACID transactions. Even for relatively small jobs, file count can quickly grow out of control.
 
-AWS documentation on Iceberg is not great. It uses out of date library versions, and it does not cover all the options available. They also fail to acknowledge that the tool you use to create the table will affect its properties. 
+AWS documentation on Iceberg is not great. It uses out-of-date library versions, and it does not cover all the options available. They also fail to acknowledge that the tool you use to create the table will affect its properties. 
 
 Here are the properties I have found to help control file count when working with Iceberg tables on AWS Glue.
 

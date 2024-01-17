@@ -9,17 +9,15 @@ import LanguageTabs from "@/components/LanguageTabs";
 
 ## What is Apache Iceberg?
 
-Apache iceberg is a data lake file format that provides features including ACID transactions and snapshot history. By default, it saves data as parquet, along with metadata files that the iceberg library uses to enable its features.
+Apache Iceberg is a data lake file format that provides features including ACID transactions and snapshot history. By default, it saves data as parquet, along with metadata files that the Iceberg library uses to enable its features.
 
-Iceberg should be your default format for new tables in the data lake. Even if you don't need the features it provides, it is still a good choice because it is a standard format with first-class support from several AWS services and Spark.
+Even if you don't need the features it provides, it is still a good default choice for tables in your data lake because it is a standard format with first-class support from several AWS services and Spark.
 
 Iceberg requires Glue 3.0 or later. Glue 4.0 is the latest version at the time of writing.
 
 ## Creating Iceberg Tables in Glue
 
-First, make sure that your table's database has a default location. Your table does not need to be in the default location, but the iceberg library works smoother if the database has a default location nonetheless. I will use Terraform to illustrate infrastructure settings. Feel free to make these settings in the AWS console if you prefer.
-
-```hcl ins={3}
+First, make sure that your table's database has a default location. Your table does not need to be in the default location, but the Iceberg library works smoother if the database has a default location nonetheless. I will use Terraform to illustrate infrastructure settings. Feel free to make these settings in the AWS console if you prefer.
 
 ```hcl ins={3}
 resource "aws_glue_catalog_database" "example" {
@@ -56,24 +54,24 @@ The `TBLPROPERTIES` are optional, but highly recommended. I will take a deeper d
 
 ## Spark Configuration
 
-There are two routes you can go to enable iceberg support in your Glue jobs. You can use a job parameter to enable iceberg support, or add the depenedencies yourself.
+There are two routes you can go to enable Iceberg support in your Glue jobs. You can use a job parameter to enable Iceberg support, or add the depenedencies yourself.
 
 **Pros to using a job parameter**:
 
-- AWS docs assume this option. The docs will always reference the same iceberg version.
+- AWS docs assume this option. The docs will always reference the same Iceberg version.
 - Less room for human error. You don't need to worry about choosing compatible jars for your Glue and Spark versions.
 
 **Cons to using a job parameter**:
 
-- You can't use the latest version of iceberg.
+- You can't use the latest version of Iceberg.
 - Spark configuration is a little more complicated.
-- Querying iceberg tables is a little less ergonomic.
+- Querying Iceberg tables is a little less ergonomic.
 
-I have recently switched to managing the iceberg dependencies myself. If you are less comfortable with Spark, feel free to use the job parameter.
+I have recently switched to managing the Iceberg dependencies myself. If you are less comfortable with Spark, feel free to use the job parameter.
 
 ### Using a Job Parameter
 
-Add the following parameter to your job in terraform:
+Add the following parameter to your job:
 
 ```hcl ins={7}
 resource "aws_glue_job" "job" {
@@ -88,11 +86,11 @@ resource "aws_glue_job" "job" {
 }
 ```
 
-This will include iceberg 1.0.0 in your job. You need to set a few Spark configuration options to enable iceberg support.
+This will include Iceberg 1.0.0 in your job. You need to set a few Spark configuration options to enable Iceberg support.
 
-In 1.0.0, you must access iceberg tables using a qualified catalog name. The name does not matter. This is a little annoying, but not a big deal. The Glue docs tend to use `glue_catalog` as the catalog name, so I will use that in examples.
+In 1.0.0, you must access Iceberg tables using a qualified catalog name. The name does not matter. This is a little annoying, but not a big deal. The Glue docs tend to use `glue_catalog` as the catalog name, so I will use that in examples.
 
-You must also specify a warehouse location. This is where iceberg will store its metadata if the table does not already have a location set. The Glue database default location takes precedence over this setting. I recommend setting the warehouse location to the same location as the database default location. If you are accessing iceberg tables from more than one database, you can create multiple catalogs per database. However, this is not necessary if your databases have their default locations set.
+You must also specify a warehouse location. This is where Iceberg will store its metadata if the table does not already have a location set. The Glue database default location takes precedence over this setting. I recommend setting the warehouse location to the same location as the database default location. If you are accessing Iceberg tables from more than one database, you can create multiple catalogs per database. However, this is not necessary if your databases have their default locations set.
 
 <LanguageTabs client:load>
 	<div slot="python">
@@ -106,7 +104,7 @@ You must also specify a warehouse location. This is where iceberg will store its
 			.getOrCreate()
 		```
 
-		Now you can access iceberg tables using the catalog name.
+		Now you can access Iceberg tables using the catalog name.
 
 		```python
 		my_table = spark.table("glue_catalog.example.my_table")
@@ -124,7 +122,7 @@ You must also specify a warehouse location. This is where iceberg will store its
 			.getOrCreate()
 		```
 
-		Now you can access iceberg tables using the catalog name.
+		Now you can access Iceberg tables using the catalog name.
 
 		```scala
 		val myTable = spark.table("glue_catalog.example.my_table")
@@ -134,7 +132,7 @@ You must also specify a warehouse location. This is where iceberg will store its
 
 ### Self-Managed Dependencies
 
-If you want to use the latest version of iceberg, you need to manage the dependencies yourself. This is not too difficult, especially in Scala.
+If you want to use the latest version of Iceberg, you need to manage the dependencies yourself. This is not too difficult, especially in Scala.
 
 Regardless of your language, **DO NOT** set `datalake-formats = iceberg` in your job parameters. This will cause the versions to clash.
 
@@ -199,13 +197,13 @@ You still need `enable-glue-datacatalog` set to true.
 
 The nice thing is that these do not require a separate, named catalog. Assuming your databases have a default location set, you do not need to provide a warehouse either. These values can be copied and pasted from job-to-job without any modifications.
 
-You can access iceberg tables like any other table in the Glue catalog now.
+You can access Iceberg tables like any other table in the Glue catalog now.
 
 ```python
 spark.table("example.my_table")
 ```
 
-It is a minor thing, but it is nice to treat all tables the same. This way you don't need to know which tables are iceberg and which are not.
+It is a minor thing, but it is nice to treat all tables the same. This way you don't need to know which tables are Iceberg and which are not.
 
 ## Writing Data in Spark
 
@@ -229,4 +227,4 @@ Other methods include:
 
 ## What's Next?
 
-In my [next post](glue-iceberg-file-count), I will cover how to create iceberg tables that don't explode in file count.
+In my [next post](glue-iceberg-file-count), I will cover how to create Iceberg tables that don't explode in file count.

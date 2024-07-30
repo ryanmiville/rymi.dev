@@ -1,15 +1,5 @@
 declare module 'astro:content' {
 	interface Render {
-		'.mdx': Promise<{
-			Content: import('astro').MarkdownInstance<{}>['Content'];
-			headings: import('astro').MarkdownHeading[];
-			remarkPluginFrontmatter: Record<string, any>;
-		}>;
-	}
-}
-
-declare module 'astro:content' {
-	interface Render {
 		'.md': Promise<{
 			Content: import('astro').MarkdownInstance<{}>['Content'];
 			headings: import('astro').MarkdownHeading[];
@@ -19,8 +9,6 @@ declare module 'astro:content' {
 }
 
 declare module 'astro:content' {
-	export { z } from 'astro/zod';
-
 	type Flatten<T> = T extends { [K: string]: infer U } ? U : never;
 
 	export type CollectionKey = keyof AnyEntryMap;
@@ -28,53 +16,6 @@ declare module 'astro:content' {
 
 	export type ContentCollectionKey = keyof ContentEntryMap;
 	export type DataCollectionKey = keyof DataEntryMap;
-
-	// This needs to be in sync with ImageMetadata
-	export type ImageFunction = () => import('astro/zod').ZodObject<{
-		src: import('astro/zod').ZodString;
-		width: import('astro/zod').ZodNumber;
-		height: import('astro/zod').ZodNumber;
-		format: import('astro/zod').ZodUnion<
-			[
-				import('astro/zod').ZodLiteral<'png'>,
-				import('astro/zod').ZodLiteral<'jpg'>,
-				import('astro/zod').ZodLiteral<'jpeg'>,
-				import('astro/zod').ZodLiteral<'tiff'>,
-				import('astro/zod').ZodLiteral<'webp'>,
-				import('astro/zod').ZodLiteral<'gif'>,
-				import('astro/zod').ZodLiteral<'svg'>,
-				import('astro/zod').ZodLiteral<'avif'>,
-			]
-		>;
-	}>;
-
-	type BaseSchemaWithoutEffects =
-		| import('astro/zod').AnyZodObject
-		| import('astro/zod').ZodUnion<[BaseSchemaWithoutEffects, ...BaseSchemaWithoutEffects[]]>
-		| import('astro/zod').ZodDiscriminatedUnion<string, import('astro/zod').AnyZodObject[]>
-		| import('astro/zod').ZodIntersection<BaseSchemaWithoutEffects, BaseSchemaWithoutEffects>;
-
-	type BaseSchema =
-		| BaseSchemaWithoutEffects
-		| import('astro/zod').ZodEffects<BaseSchemaWithoutEffects>;
-
-	export type SchemaContext = { image: ImageFunction };
-
-	type DataCollectionConfig<S extends BaseSchema> = {
-		type: 'data';
-		schema?: S | ((context: SchemaContext) => S);
-	};
-
-	type ContentCollectionConfig<S extends BaseSchema> = {
-		type?: 'content';
-		schema?: S | ((context: SchemaContext) => S);
-	};
-
-	type CollectionConfig<S> = ContentCollectionConfig<S> | DataCollectionConfig<S>;
-
-	export function defineCollection<S extends BaseSchema>(
-		input: CollectionConfig<S>
-	): CollectionConfig<S>;
 
 	type AllValuesOf<T> = T extends any ? T[keyof T] : never;
 	type ValidContentEntrySlug<C extends keyof ContentEntryMap> = AllValuesOf<
@@ -185,20 +126,94 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"blog": {
-"glue-iceberg-file-count.mdx": {
-	id: "glue-iceberg-file-count.mdx";
-  slug: "glue-iceberg-file-count";
+"adding-new-post.md": {
+	id: "adding-new-post.md";
+  slug: "adding-new-posts-in-astropaper-theme";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
-} & { render(): Render[".mdx"] };
-"glue-iceberg.mdx": {
-	id: "glue-iceberg.mdx";
-  slug: "glue-iceberg";
+} & { render(): Render[".md"] };
+};
+"projects": {
+"aws-glue.md": {
+	id: "aws-glue.md";
+  slug: "aws-glue";
   body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".mdx"] };
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".md"] };
+"aws-go.md": {
+	id: "aws-go.md";
+  slug: "aws-go";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".md"] };
+"fantano-fetcher.md": {
+	id: "fantano-fetcher.md";
+  slug: "fantano-fetcher";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".md"] };
+"glue-cli.md": {
+	id: "glue-cli.md";
+  slug: "glue-cli";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".md"] };
+"goth-stack.md": {
+	id: "goth-stack.md";
+  slug: "goth-stack";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".md"] };
+"natchex.md": {
+	id: "natchex.md";
+  slug: "natchex";
+  body: string;
+  collection: "projects";
+  data: InferEntrySchema<"projects">
+} & { render(): Render[".md"] };
+};
+"work": {
+"cb.md": {
+	id: "cb.md";
+  slug: "cb";
+  body: string;
+  collection: "work";
+  data: InferEntrySchema<"work">
+} & { render(): Render[".md"] };
+"ssc.md": {
+	id: "ssc.md";
+  slug: "ssc";
+  body: string;
+  collection: "work";
+  data: InferEntrySchema<"work">
+} & { render(): Render[".md"] };
+"terminus-2.md": {
+	id: "terminus-2.md";
+  slug: "terminus-2";
+  body: string;
+  collection: "work";
+  data: InferEntrySchema<"work">
+} & { render(): Render[".md"] };
+"terminus.md": {
+	id: "terminus.md";
+  slug: "terminus";
+  body: string;
+  collection: "work";
+  data: InferEntrySchema<"work">
+} & { render(): Render[".md"] };
+"tst.md": {
+	id: "tst.md";
+  slug: "tst";
+  body: string;
+  collection: "work";
+  data: InferEntrySchema<"work">
+} & { render(): Render[".md"] };
 };
 
 	};
@@ -209,5 +224,5 @@ declare module 'astro:content' {
 
 	type AnyEntryMap = ContentEntryMap & DataEntryMap;
 
-	type ContentConfig = typeof import("../src/content/config");
+	export type ContentConfig = typeof import("../src/content/config.js");
 }

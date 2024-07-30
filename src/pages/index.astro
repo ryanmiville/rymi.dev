@@ -1,35 +1,206 @@
 ---
-import BlogCard from "@/components/BlogCard.astro";
-import Layout from "@/layouts/Layout.astro";
+import Card from "@components/Card";
+import Footer from "@components/Footer.astro";
+import Header from "@components/Header.astro";
+import Hr from "@components/Hr.astro";
+import LinkButton from "@components/LinkButton.astro";
+import Socials from "@components/Socials.astro";
+import { SITE, SOCIALS } from "@config";
+import Layout from "@layouts/Layout.astro";
+import getSortedPosts from "@utils/getSortedPosts";
+import WorkCard from "@components/WorkCard.astro";
+import ProjectCard from "@components/ProjectCard.astro";
 import { getCollection } from "astro:content";
 
-const title = "Ryan Miville";
-const description = "Web developer and data engineer.";
+const posts = await getCollection("blog");
 
-const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+const sortedPosts = getSortedPosts(posts);
+const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
+const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+
+const socialCount = SOCIALS.filter(social => social.active).length;
+
+const projects = (await getCollection("projects"))
+  .filter(project => !project.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, SITE.projectsPerPage);
+
+const allwork = (await getCollection("work"))
+  .sort(
+    (a, b) =>
+      new Date(b.data.dateStart).valueOf() -
+      new Date(a.data.dateStart).valueOf()
+  )
+  .slice(0, SITE.worksPerPage);
+
+const work = await Promise.all(
+  allwork.map(async item => {
+    const { Content } = await item.render();
+    return { ...item, Content };
+  })
 );
 ---
 
-<Layout title={title} description={description}>
-  <div class="mt-16 mb-20">
-    <h1 class="font-extrabold text-4xl">Hi, I'm Ryan Miville</h1>
-    <div class="text-stone-700 dark:text-stone-300 mt-2 text-lg">
+<Layout>
+  <Header />
+  <main id="main-content">
+    <section id="hero">
+      <h1>Hi, I'm Ryan Miville</h1>
       <p>
         a software engineer with a focus on data-heavy apps and developer
         experience. I'm also passionate about music and art. I occasionally try
         to merge these things into something interesting.
       </p>
-    </div>
-  </div>
-  {
-    posts.map((post) => {
-      const href = `/blog/${post.slug}`;
-      return (
-        <a href={href}>
-          <BlogCard post={post} />
-        </a>
-      );
-    })
-  }
+      {
+        // only display if at least one social link is enabled
+        socialCount > 0 && (
+          <div class="social-wrapper">
+            <div class="social-links">Social Links:</div>
+            <Socials />
+          </div>
+        )
+      }
+    </section>
+
+    <Hr />
+
+    {
+      work.length > 0 && (
+          <section id="work">
+            <h2>Work Experience</h2>
+            <ul>
+              {work.map((entry) => (
+              <WorkCard frontmatter={entry.data} />
+              ))}
+            </ul>
+          </section>
+          <div class="all-posts-btn-wrapper">
+            <LinkButton href="/work/">
+              All Work
+              <svg xmlns="http://www.w3.org/2000/svg">
+                <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z" />
+              </svg>
+            </LinkButton>
+          </div>
+
+          <Hr />
+          )
+    }
+
+    {
+      projects.length > 0 && (
+          <section id="projects">
+            <h2>Recent Projects</h2>
+            <ul>
+              {projects.map(entry => (
+              <ProjectCard frontmatter={entry.data} />
+              ))}
+            </ul>
+          </section>
+
+          <div class="all-posts-btn-wrapper">
+            <LinkButton href="/projects/">
+              All Projects
+              <svg xmlns="http://www.w3.org/2000/svg">
+                <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z" />
+              </svg>
+            </LinkButton>
+          </div>
+
+      )
+    }
+
+    {
+      featuredPosts.length > 0 && (
+        <>
+          <Hr />
+          <section id="featured">
+            <h2>Featured</h2>
+            <ul>
+              {featuredPosts.map(({ data, slug }) => (
+                <Card
+                  href={`/posts/${slug}/`}
+                  frontmatter={data}
+                  secHeading={false}
+                />
+              ))}
+            </ul>
+          </section>
+          {recentPosts.length > 0 && <Hr />}
+        </>
+      )
+    }
+
+    {
+      recentPosts.length > 0 && (
+        <section id="recent-posts">
+          <h2>Recent Posts</h2>
+          <ul>
+            {recentPosts.map(
+              ({ data, slug }, index) =>
+                index < SITE.postPerIndex && (
+                  <Card
+                    href={`/posts/${slug}/`}
+                    frontmatter={data}
+                    secHeading={false}
+                  />
+                )
+            )}
+          </ul>
+        </section>
+      )
+    }
+
+    {
+      recentPosts.length > 0 && (
+        <div class="all-posts-btn-wrapper">
+          <LinkButton href="/posts/">
+            All Posts
+            <svg xmlns="http://www.w3.org/2000/svg">
+              <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z" />
+            </svg>
+          </LinkButton>
+        </div>
+      )
+    }
+  </main>
+
+  <Footer />
 </Layout>
+
+<style>
+  /* ===== Hero Section ===== */
+  #hero {
+    @apply pb-6 pt-8;
+
+    h1 {
+      @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
+    }
+    .rss-link {
+      @apply mb-6;
+    }
+    .rss-icon {
+      @apply mb-2 h-6 w-6 scale-110 fill-skin-accent sm:mb-3 sm:scale-125;
+    }
+    p {
+      @apply my-2;
+    }
+    .social-wrapper {
+      @apply mt-4 flex flex-col sm:flex-row sm:items-center;
+    }
+    .social-links {
+      @apply mb-1 mr-2 whitespace-nowrap sm:mb-0;
+    }
+  }
+
+  /* ===== Other Sections ===== */
+  section:not(#hero){
+    @apply pb-6 pt-12;
+  }
+  h2 {
+    @apply text-2xl font-semibold tracking-wide;
+  }
+  .all-posts-btn-wrapper {
+    @apply mb-6 text-center;
+  }
+</style>

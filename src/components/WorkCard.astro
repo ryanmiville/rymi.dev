@@ -1,0 +1,19 @@
+---
+import type { CollectionEntry } from "astro:content";
+import DateRange from "./DateRange.astro";
+
+export interface Props {
+  frontmatter: CollectionEntry<"work">["data"];
+}
+
+const { frontmatter } = Astro.props;
+const { company, role, dateStart, dateEnd } = frontmatter;
+---
+
+<li class="my-6">
+  <div class="inline-block text-lg font-medium text-skin-accent">
+    <h3>{company}</h3>
+  </div>
+  <DateRange startDate={dateStart} endDate={dateEnd} />
+  <p>{role}</p>
+</li>

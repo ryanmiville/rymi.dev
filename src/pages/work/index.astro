@@ -1,0 +1,32 @@
+---
+import Footer from "@components/Footer.astro";
+import Header from "@components/Header.astro";
+import WorkCard from "@components/WorkCard.astro";
+import { SITE } from "@config";
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import { getCollection } from "astro:content";
+
+const allwork = (await getCollection("work")).sort(
+  (a, b) =>
+    new Date(b.data.dateStart).valueOf() - new Date(a.data.dateStart).valueOf()
+);
+
+const work = await Promise.all(
+  allwork.map(async item => {
+    const { Content } = await item.render();
+    return { ...item, Content };
+  })
+);
+---
+
+<Layout title={`Work | ${SITE.title}`}>
+  <Header activeNav="work" />
+  <Main pageTitle="Work" pageDesc="All of my work experience.">
+    <ul>
+      {work.map(entry => <WorkCard frontmatter={entry.data} />)}
+    </ul>
+  </Main>
+
+  <Footer />
+</Layout>

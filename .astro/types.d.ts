@@ -186,16 +186,16 @@ declare module 'astro:content' {
   collection: "work";
   data: InferEntrySchema<"work">
 } & { render(): Render[".md"] };
-"ssc.md": {
-	id: "ssc.md";
-  slug: "ssc";
+"demandscience.md": {
+	id: "demandscience.md";
+  slug: "demandscience";
   body: string;
   collection: "work";
   data: InferEntrySchema<"work">
 } & { render(): Render[".md"] };
-"terminus-2.md": {
-	id: "terminus-2.md";
-  slug: "terminus-2";
+"ssc.md": {
+	id: "ssc.md";
+  slug: "ssc";
   body: string;
   collection: "work";
   data: InferEntrySchema<"work">

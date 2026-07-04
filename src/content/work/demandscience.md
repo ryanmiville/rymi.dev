@@ -2,5 +2,5 @@
 company: "DemandScience"
 role: "Technical Lead Engineer"
 dateStart: "09/25/2023"
-dateEnd: "current"
+dateEnd: "10/01/2025"
 ---

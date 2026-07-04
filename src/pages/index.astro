@@ -10,7 +10,7 @@ import Layout from "@layouts/Layout.astro";
 import getSortedPosts from "@utils/getSortedPosts";
 import WorkCard from "@components/WorkCard.astro";
 import ProjectCard from "@components/ProjectCard.astro";
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 
 const posts = await getCollection("blog");
 
@@ -35,7 +35,7 @@ const allwork = (await getCollection("work"))
 
 const work = await Promise.all(
   allwork.map(async item => {
-    const { Content } = await item.render();
+    const { Content } = await render(item);
     return { ...item, Content };
   })
 );
@@ -117,9 +117,9 @@ const work = await Promise.all(
           <section id="featured">
             <h2>Featured</h2>
             <ul>
-              {featuredPosts.map(({ data, slug }) => (
+              {featuredPosts.map(({ data, id }) => (
                 <Card
-                  href={`/posts/${slug}/`}
+                  href={`/posts/${id}/`}
                   frontmatter={data}
                   secHeading={false}
                 />
@@ -137,10 +137,10 @@ const work = await Promise.all(
           <h2>Recent Posts</h2>
           <ul>
             {recentPosts.map(
-              ({ data, slug }, index) =>
+              ({ data, id }, index) =>
                 index < SITE.postPerIndex && (
                   <Card
-                    href={`/posts/${slug}/`}
+                    href={`/posts/${id}/`}
                     frontmatter={data}
                     secHeading={false}
                   />
@@ -169,6 +169,7 @@ const work = await Promise.all(
 </Layout>
 
 <style>
+@reference "../styles/base.css";
   /* ===== Hero Section ===== */
   #hero {
     @apply pb-6 pt-8;

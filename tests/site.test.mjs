@@ -161,6 +161,15 @@ test("feed, sitemap, fonts, scripts, and share image are served", async () => {
 
 test("static reading pages avoid the full app runtime; interactive pages get their entry", async () => {
   const home = await (await fetch(base)).text();
+  const homeEntries = [
+    ...home.matchAll(/<a\b[^>]*href="(\/notes\/[^"?#]+)"/g),
+  ].map((match) => match[1]);
+  assert.ok(homeEntries.length > 0, "Home features published notes");
+  assert.equal(
+    homeEntries.length,
+    new Set(homeEntries).size,
+    "Each home entry appears once across all subjects",
+  );
   const about = await (await fetch(base + "/about")).text();
   const project = await (await fetch(base + "/notes/dq")).text();
   const archive = await (await fetch(base + "/notes")).text();

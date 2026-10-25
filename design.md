@@ -18,7 +18,7 @@ Choose the composition around what the visitor came to do.
 
 | Surface | Visitor’s job | Composition |
 | --- | --- | --- |
-| Home | Understand Ryan’s interests and find something worth exploring | Brief introduction, one art-and-code illustration, three selected projects, recent notes |
+| Home | Understand Ryan’s interests and find something worth exploring | Brief introduction, one art-and-code illustration, and one Notes section with three recent entries across all subjects |
 | Notebook | Find project write-ups and articles | Searchable, filterable rows with a sketch icon, title, description, subject or project kind, and drawn arrow |
 | Project note | Understand the problem, idea, and experience | Preserve the project layout: clear introduction, metadata, readable prose, diagrams, and a next-project link |
 | Article | Follow an idea comfortably | Reading column, clear subheads, occasional explanatory diagrams and margin notes |
@@ -165,7 +165,7 @@ Reuse these existing classes and their behavior before creating a new component.
 | Labels | `.eyebrow`, `.micro` | Context and metadata subordinate to the content |
 | Primary action | `.rough-button` | Slightly doubled drawn frame, soft fill, drawn arrow |
 | Text destination | `.text-link`, `.pen-arrow` | Readable text with a small authored arrow |
-| Project preview | `.project-preview`, `.preview-top`, `.sketch-icon` | Selected work on home; responsive icon-led row |
+| Note preview | `.note-preview`, `.preview-top`, `.sketch-icon` | Recent notes across all subjects on home; responsive icon-led row |
 | Archive | `.archive-row`, `.filters`, `.filter`, `.search-label` | Scannable collection with working filters/search |
 | Note listing | `.note-row` | Title, short description, and clear destination |
 | Reading | `.prose`, `.inline-note` | Clean body text with occasional handwritten aside |
@@ -231,7 +231,7 @@ Keep prompts, sample content, viewport, and appearance fixed when comparing a de
 
 | Scenario | Fixed task | Check |
 | --- | --- | --- |
-| Home | Intro, three projects, two notes | Clear hierarchy; art/code identity; controlled doodles; no clipping |
+| Home | Intro and three recent notes | Clear hierarchy; each entry appears once; art/code identity; controlled doodles; no clipping |
 | Archive | Everything, Tools, Studies; search with zero results | Marker follows selection; counts and reset work; drawn link arrows |
 | Article | “Leave a little room,” with step two selected | Readable prose; shared diagram style; caption and focus survive appearance change |
 | Project | Switchboard detail | Context and purpose readable before diagram; next destination clear |

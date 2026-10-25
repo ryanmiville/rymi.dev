@@ -26,7 +26,7 @@ Or run all three with `npm run verify`. Tests start and stop their own productio
 - `pages/notes/*.md`: all published notes, including project write-ups; automatically included in the notebook, home, RSS, and sitemap.
 - `pages/about.md`: personal introduction.
 - `content/experience.json`: work history.
-- `src/content.ts`: archive metadata and the three selected homepage projects.
+- `src/content.ts`: shared note metadata. The homepage shows the three latest entries once, across all subjects.
 
 Add a note with a filename that matches its URL, for example `pages/notes/a-note.md`:
 

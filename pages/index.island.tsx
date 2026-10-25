@@ -1,7 +1,7 @@
-import { selectedProjects, notes } from "../src/content";
+import { notes } from "../src/content";
 import { DeskArt, Orbit } from "../src/components/drawings";
-import { MarginLoop, PenArrow, RoughLink } from "../src/components/sketches";
-import ProjectPreview from "../src/components/project-preview";
+import { PenArrow, RoughLink } from "../src/components/sketches";
+import NotePreview from "../src/components/note-preview";
 
 export const frontmatter = { section: "home" };
 
@@ -21,9 +21,7 @@ export default function Home() {
             occasionally try to merge these things into something interesting.
           </p>
           <div className="home-actions">
-            <RoughLink href="/notes?topic=Projects">
-              Explore my projects
-            </RoughLink>
+            <RoughLink href="/notes">Explore my notes</RoughLink>
             <a className="text-link" href="/about">
               About me
             </a>
@@ -34,54 +32,21 @@ export default function Home() {
           <Orbit />
         </div>
       </section>
-      <section aria-labelledby="selected-work">
+      <section aria-labelledby="home-notes-title">
         <div className="section-top">
-          <h2 id="selected-work">A few things I’ve made</h2>
-          <a className="text-link" href="/notes?topic=Projects">
-            All projects <PenArrow />
+          <h2 id="home-notes-title">In the margins</h2>
+          <a className="text-link" href="/notes">
+            All notes <PenArrow />
           </a>
         </div>
-        <div className="home-projects">
-          {selectedProjects.map((project, index) => (
-            <ProjectPreview
-              key={project.path}
-              project={project}
-              index={index}
-            />
-          ))}
-        </div>
-      </section>
-      <section className="home-notes" aria-labelledby="latest-notes">
-        <div>
-          <h2 id="latest-notes">
-            In the margins
-            <MarginLoop />
-          </h2>
-          <p className="serif-note">
-            Notes on software,
-            <br />
-            music, and art.
-          </p>
-        </div>
         {notes.length ? (
-          <div>
-            {notes.slice(0, 2).map((note) => (
-              <a className="note-row" key={note.path} href={note.path}>
-                <div>
-                  <h3>{note.title}</h3>
-                  <p>{note.description}</p>
-                </div>
-                <PenArrow />
-              </a>
+          <div className="home-notes-grid">
+            {notes.slice(0, 3).map((note, index) => (
+              <NotePreview key={note.path} note={note} index={index} />
             ))}
           </div>
         ) : (
-          <div className="home-notes-empty">
-            <p>No notes published yet.</p>
-            <a className="text-link" href="/notes">
-              Visit the notebook <PenArrow />
-            </a>
-          </div>
+          <p className="home-notes-empty">No notes published yet.</p>
         )}
       </section>
     </>

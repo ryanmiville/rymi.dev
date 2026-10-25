@@ -40,11 +40,6 @@ export const projects = notes.filter(
   (note): note is Project => note.topic === "Projects" && Boolean(note.repoURL),
 );
 
-// Keep the home curated independently of archive growth.
-export const selectedProjects = ["dq", "fantano-fetcher", "aws-glue"]
-  .map((slug) => projects.find((project) => project.path === `/notes/${slug}`))
-  .filter((project): project is Project => Boolean(project));
-
 export function dateLabel(value: string) {
   const date = new Date(value);
   return Number.isNaN(date.valueOf())

@@ -358,7 +358,6 @@ a:active .pen-arrow {
   margin-bottom: 23px;
 }
 .section-top h2,
-.home-notes h2,
 .about-contact h2 {
   font:
     600 2.0625rem/1.1 Caveat,
@@ -498,12 +497,12 @@ a:active .pen-arrow {
   transform: rotate(-9deg);
   color: var(--accent2);
 }
-.home-projects {
+.home-notes-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 32px;
 }
-.project-preview {
+.note-preview {
   display: block;
   border-top: 1px solid var(--line);
   padding-top: 20px;
@@ -520,7 +519,7 @@ a:active .pen-arrow {
   font-size: 0.5625rem;
   text-align: right;
 }
-.project-preview h3 {
+.note-preview h3 {
   font-size: 1.3125rem;
   line-height: 1.3;
   display: flex;
@@ -528,56 +527,15 @@ a:active .pen-arrow {
   gap: 12px;
   align-items: start;
 }
-.project-preview p {
+.note-preview p {
   font-size: 0.75rem;
   line-height: 1.8;
   color: var(--muted);
   margin-top: 7px;
 }
-.home-notes {
-  margin-top: 43px;
-  padding-top: 29px;
-  border-top: 1px solid var(--line);
-  display: grid;
-  grid-template-columns: 190px minmax(0, 1fr);
-  gap: 38px;
-}
-.home-notes h2 {
-  position: relative;
-  padding-bottom: 14px;
-  margin-bottom: 10px;
-}
-.home-notes .serif-note {
-  max-width: 175px;
-}
 .home-notes-empty {
-  padding: 3px 0 15px;
-  align-self: center;
-}
-.home-notes-empty p {
   color: var(--muted);
   font-size: 0.875rem;
-  margin-bottom: 14px;
-}
-.note-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  align-items: center;
-  padding: 18px 0;
-  border-bottom: 1px solid var(--line);
-}
-.note-row > div {
-  min-width: 0;
-}
-.note-row h3 {
-  font-size: 1.0625rem;
-  letter-spacing: -0.02em;
-}
-.note-row p {
-  font-size: 0.8125rem;
-  color: var(--muted);
-  margin-top: 5px;
 }
 
 /* A growing archive is a list, rather than an expanding grid of cards. */
@@ -1241,10 +1199,10 @@ a:active .pen-arrow {
   .wordmark:hover svg {
     transform: rotate(15deg);
   }
-  .project-preview:hover .sketch-icon {
+  .note-preview:hover .sketch-icon {
     transform: rotate(-4deg);
   }
-  .project-preview:hover h3,
+  .note-preview:hover h3,
   .archive-row:hover h2,
   .note-row:hover h2,
   .note-row:hover h3,
@@ -1271,7 +1229,7 @@ a:active .pen-arrow {
     left: -5px;
     top: -8px;
   }
-  .home-projects {
+  .home-notes-grid {
     gap: 25px;
   }
   .preview-top .micro {
@@ -1354,11 +1312,11 @@ a:active .pen-arrow {
   .section-top h2 {
     font-size: 1.8125rem;
   }
-  .home-projects {
+  .home-notes-grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 23px;
   }
-  .project-preview {
+  .note-preview {
     display: grid;
     grid-template-columns: 70px minmax(0, 1fr);
     gap: 0 16px;
@@ -1373,28 +1331,13 @@ a:active .pen-arrow {
   .preview-top .micro {
     display: none;
   }
-  .project-preview h3 {
+  .note-preview h3 {
     font-size: 1.375rem;
     align-self: end;
   }
-  .project-preview p {
+  .note-preview p {
     font-size: 0.8125rem;
     margin-top: 5px;
-  }
-  .home-notes {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 22px;
-    margin-top: 34px;
-    padding-top: 24px;
-  }
-  .home-notes h2 {
-    width: max-content;
-    font-size: 2rem;
-    margin-bottom: 8px;
-  }
-  .home-notes .serif-note {
-    max-width: 300px;
-    font-size: 1.25rem;
   }
   .archive-head {
     display: block;
@@ -1623,11 +1566,11 @@ a:active .pen-arrow {
   .desk-illustration > .desk-sketch {
     height: 210px;
   }
-  .project-preview {
+  .note-preview {
     grid-template-columns: 52px minmax(0, 1fr);
     gap: 0 13px;
   }
-  .project-preview h3 {
+  .note-preview h3 {
     font-size: 1.25rem;
   }
   .preview-top .sketch-icon {

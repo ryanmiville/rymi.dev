@@ -1,5 +1,54 @@
 import type { ReactNode } from "react";
 
+export function SocialIcon({ name }: { name: "github" | "x" | "linkedin" }) {
+  return (
+    <svg
+      className="social-icon"
+      viewBox="0 0 32 32"
+      width="28"
+      height="28"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {name === "github" ? (
+        <>
+          <path d="M12 28L12 24C7 25 6 22 4 21M20 28L20 23Q20 21 19 20C25 19 27 16 27 12Q27 9 25 7Q26 4 25 3Q22 3 20 5Q16 4 12 5Q9 3 7 3Q6 5 7 8Q5 10 5 13C5 18 8 20 13 20Q12 21 12 24" />
+          <path
+            d="M13 28L13 24M21 27L21 23M7 13Q6 18 12 19M8 4L9 7"
+            strokeWidth=".6"
+            opacity=".45"
+          />
+        </>
+      ) : name === "x" ? (
+        <>
+          <path d="M5 5L11 5L27 27L21 27ZM26 5Q19 13 17 15M14 18L5 27" />
+          <path
+            d="M6 6L22 26M25 6L19 13M13 20L7 26"
+            strokeWidth=".6"
+            opacity=".45"
+          />
+        </>
+      ) : (
+        <>
+          <path d="M5 4Q16 3 27 5L28 27Q15 29 4 27Z" />
+          <path d="M10 14L10 23M15 23L15 14M15 18Q15 13 20 14Q23 14 23 18L23 23" />
+          <path d="M10 9L10.1 9.1" strokeWidth="3" />
+          <path
+            d="M6 5Q17 4 26 6M27 7L27 26L6 27M11 15L11 22"
+            strokeWidth=".6"
+            opacity=".45"
+          />
+        </>
+      )}
+    </svg>
+  );
+}
+
 export function PenArrow({ back = false }: { back?: boolean }) {
   return (
     <svg

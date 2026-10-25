@@ -1,6 +1,6 @@
 import { notes } from "../src/content";
 import { DeskArt, Orbit } from "../src/components/drawings";
-import { PenArrow, RoughLink } from "../src/components/sketches";
+import { PenArrow, RoughLink, SocialIcon } from "../src/components/sketches";
 import NotePreview from "../src/components/note-preview";
 
 export const frontmatter = { section: "home" };
@@ -26,6 +26,32 @@ export default function Home() {
               About me
             </a>
           </div>
+          <nav className="home-socials" aria-label="Social profiles">
+            <a
+              href="https://github.com/ryanmiville"
+              aria-label="GitHub"
+              title="GitHub"
+              rel="me"
+            >
+              <SocialIcon name="github" />
+            </a>
+            <a
+              href="https://x.com/ryanmiville"
+              aria-label="X"
+              title="X"
+              rel="me"
+            >
+              <SocialIcon name="x" />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/ryan-miville-00160248"
+              aria-label="LinkedIn"
+              title="LinkedIn"
+              rel="me"
+            >
+              <SocialIcon name="linkedin" />
+            </a>
+          </nav>
         </div>
         <div className="desk-illustration" aria-hidden="true">
           <DeskArt />

@@ -477,6 +477,29 @@ a:active .pen-arrow {
   color: var(--muted);
   min-height: 44px;
 }
+.home-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 0 -8px;
+}
+.home-socials a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--muted);
+  touch-action: manipulation;
+}
+.home-socials a:active {
+  color: var(--sage);
+}
+.social-icon {
+  display: block;
+  flex-shrink: 0;
+  pointer-events: none;
+}
 .desk-illustration {
   position: relative;
   min-height: 280px;
@@ -1217,6 +1240,9 @@ a:active .pen-arrow {
 @media (hover: hover) and (pointer: fine) {
   .wordmark:hover svg {
     transform: rotate(15deg);
+  }
+  .home-socials a:hover {
+    color: var(--sage);
   }
   .note-preview:hover .sketch-icon {
     transform: rotate(-4deg);

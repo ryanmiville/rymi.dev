@@ -1,6 +1,6 @@
 import Layout from "../layout";
 import type { ReactNode } from "react";
-import { ArtCodeSketch, PenArrow } from "../../src/components/sketches";
+import { PenArrow } from "../../src/components/sketches";
 import Experience from "../../src/components/experience";
 
 export default function AboutLayout({ children }: { children: ReactNode }) {
@@ -14,7 +14,6 @@ export default function AboutLayout({ children }: { children: ReactNode }) {
           <em>about me.</em>
         </h1>
         <div className="prose void-md about-copy">{children}</div>
-        <ArtCodeSketch />
         <section className="about-experience" aria-labelledby="experience">
           <div className="section-top">
             <h2 id="experience">Along the way</h2>

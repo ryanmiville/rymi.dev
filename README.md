@@ -54,6 +54,8 @@ The app imports `@void/md/theme-content.css`; prose is scoped to `.void-md` and 
 
 Follow [design.md](./design.md). Shared sketches are authored SVG paths, and Caveat is self-hosted with its license in `public/fonts/OFL.txt`. Light, dark, and system appearance are available in the footer. Static reading pages ship HTML; the project archive adds a React island for search and category filters.
 
+The art/code Venn illustration is saved as `ArtCodeSketch` in `src/components/sketches.tsx`, with its `.about-venn` styles in `src/styles/site.css`. It is currently unused and available for future placement.
+
 Regenerate the social sharing image with `npm run og` after changing its source in `scripts/generate-og.mjs`.
 
 ## Hosting

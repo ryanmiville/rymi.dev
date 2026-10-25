@@ -66,7 +66,8 @@ test("every public page has the shared frame, a title, and its own canonical", a
       assert.match(html, /aria-label="Main navigation"/, path);
       assert.match(html, /href="\/"[^>]*>Home<\/a>/, path);
       assert.match(html, /<main[^>]+id="main-content"/, path);
-      assert.match(html, /<footer/, path);
+      assert.doesNotMatch(html, /<footer/, path);
+      assert.match(html, /aria-label="Appearance: System theme"/, path);
       assert.ok(
         html.includes(`href="https://rymi.dev${path}"`),
         `Canonical for ${path}`,

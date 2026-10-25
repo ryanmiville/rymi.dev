@@ -217,6 +217,82 @@ a:active .pen-arrow {
   transform: rotate(-8deg);
   transition: transform 180ms var(--ease);
 }
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+}
+.appearance {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 10;
+}
+.appearance summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--muted);
+  list-style: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.appearance summary::-webkit-details-marker {
+  display: none;
+}
+.appearance summary:active {
+  color: var(--sage);
+}
+.appearance-icon {
+  width: 25px;
+  height: 25px;
+  pointer-events: none;
+}
+.appearance-moon {
+  display: none;
+}
+:root[data-theme="dark"] .appearance-sun {
+  display: none;
+}
+:root[data-theme="dark"] .appearance-moon {
+  display: block;
+}
+.appearance .appearance-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 170px;
+  padding: 8px;
+  --surface: var(--paper);
+}
+.appearance-menu button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-align: left;
+}
+.appearance-menu button[aria-pressed="true"] {
+  color: var(--sage);
+  background: var(--soft);
+}
+.appearance-menu button[aria-pressed="true"]::after {
+  content: "";
+  width: 5px;
+  height: 9px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(40deg);
+  margin-left: 12px;
+}
 .site-nav {
   display: flex;
   gap: 29px;
@@ -1167,56 +1243,12 @@ a:active .pen-arrow {
   margin: 20px 0;
 }
 
-.site-footer {
-  padding-top: 22px;
-  padding-bottom: max(28px, env(safe-area-inset-bottom));
-  border-top: 1px solid var(--line);
-  display: flex;
-  justify-content: space-between;
-  gap: 25px;
-  align-items: center;
-}
-.footer-signature p {
-  font:
-    600 1.25rem/1.3 Caveat,
-    cursive;
-  color: var(--accent3);
-}
-.footer-signature .micro {
-  display: block;
-  margin-top: 4px;
-  font-size: 0.5625rem;
-}
-.footer-right {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  align-items: center;
-}
-.appearance-control {
-  display: flex;
-  align-items: center;
-  min-width: 0;
-  max-width: 100%;
-}
-.appearance-control select {
-  border: 0;
-  border-bottom: 1px solid var(--line);
-  border-radius: 0;
-  padding: 8px 3px;
-  background: var(--paper);
-  color: var(--muted);
-  font: inherit;
-  font-size: 0.75rem;
-  min-height: 44px;
-  max-width: 155px;
-  cursor: pointer;
-}
-
 @media (hover: hover) and (pointer: fine) {
   .wordmark:hover svg {
     transform: rotate(15deg);
   }
+  .appearance summary:hover,
+  .appearance-menu button:hover,
   .home-socials a:hover {
     color: var(--sage);
   }
@@ -1279,7 +1311,7 @@ a:active .pen-arrow {
     flex-wrap: wrap;
     padding-top: max(23px, env(safe-area-inset-top));
     padding-bottom: 24px;
-    gap: 15px;
+    gap: 10px;
   }
   .wordmark {
     font-size: 0.8125rem;
@@ -1289,8 +1321,11 @@ a:active .pen-arrow {
     width: 21px;
     height: 27px;
   }
+  .header-actions {
+    gap: 8px;
+  }
   .site-nav {
-    gap: 21px;
+    gap: 14px;
     font-size: 0.75rem;
   }
   .home-hero {
@@ -1534,27 +1569,6 @@ a:active .pen-arrow {
     display: block;
     margin-top: 9px;
   }
-  .site-footer {
-    flex-direction: column;
-    align-items: stretch;
-    padding-top: 22px;
-    padding-bottom: max(25px, env(safe-area-inset-bottom));
-    gap: 8px;
-  }
-  .footer-signature .micro {
-    display: none;
-  }
-  .footer-right {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 0 22px;
-  }
-  .appearance-control {
-    margin-left: auto;
-  }
-  .appearance-control select {
-    font-size: 1rem;
-  }
 }
 
 @media (max-width: 359px) {
@@ -1573,7 +1587,7 @@ a:active .pen-arrow {
     gap: 6px;
   }
   .site-nav {
-    gap: 15px;
+    gap: 11px;
     font-size: 0.6875rem;
   }
   .home-hero h1 {

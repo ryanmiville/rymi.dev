@@ -107,7 +107,7 @@ Titles may wrap. Never clip ascenders or descenders to force a fixed height. Pro
 - Space hero and major sections generously; reference gaps are 35–65px. Use approximately 20–30px around related groups and 7–16px within small components.
 - Use thin rules and spacing to separate archive rows. Avoid enclosing every project, note, or paragraph in a card.
 - Keep titles, descriptions, and destinations readable as content grows. Use `minmax(0, 1fr)`, `min-width: 0`, and wrapping where needed.
-- Let the footer follow long content and sit low on short pages. Reserve space for fixed controls only when those controls are actually present.
+- There is no footer. Keep appearance in the header: a hand-drawn sun/moon icon opens System theme, Light, and Dark choices. Default to System theme, and preserve explicit user choices. Reserve space for fixed controls only when those controls are actually present.
 
 ## Drawing vocabulary
 
@@ -160,7 +160,7 @@ Reuse these existing classes and their behavior before creating a new component.
 
 | Primitive | Classes | Contract |
 | --- | --- | --- |
-| Page frame | `.shell`, `.site-header`, `.site-nav`, `.site-footer` | Shared geometry, navigation, and footer |
+| Page frame | `.shell`, `.site-header`, `.site-nav`, `.appearance` | Shared geometry, navigation, and header appearance control |
 | Display title | `.page-title`, title `em` | Handwritten heading with cobalt emphasis |
 | Labels | `.eyebrow`, `.micro` | Context and metadata subordinate to the content |
 | Primary action | `.rough-button` | Slightly doubled drawn frame, soft fill, drawn arrow |

@@ -63,7 +63,7 @@ The app imports `@void/md/theme-content.css`; prose is scoped to `.void-md` and 
 
 ## Design
 
-Follow [design.md](./design.md). Shared sketches are authored SVG paths, and Caveat is self-hosted with its license in `public/fonts/OFL.txt`. Light, dark, and system appearance are available in the footer. Static reading pages ship HTML; the notebook adds a React island for search and subject filters.
+Follow [design.md](./design.md). Shared sketches are authored SVG paths, and Caveat is self-hosted with its license in `public/fonts/OFL.txt`. A hand-drawn sun/moon control in the header offers System theme (the default), Light, and Dark. Explicit choices persist across pages and visits; System theme follows OS changes automatically. The site has no footer. Static reading pages ship HTML; the notebook adds a React island for search and subject filters.
 
 The art/code Venn illustration is saved as `ArtCodeSketch` in `src/components/sketches.tsx`, with its `.about-venn` styles in `src/styles/site.css`. It is currently unused and available for future placement.
 

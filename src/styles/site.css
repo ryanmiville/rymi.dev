@@ -1208,15 +1208,6 @@ a:active .pen-arrow {
   gap: 20px;
   align-items: center;
 }
-.footer-right > a {
-  font-size: 0.75rem;
-  min-height: 44px;
-  color: var(--muted);
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  white-space: nowrap;
-}
 .appearance-control {
   display: flex;
   align-items: center;
@@ -1251,8 +1242,7 @@ a:active .pen-arrow {
   .archive-row:hover h2,
   .note-row:hover h2,
   .note-row:hover h3,
-  .site-nav a:hover,
-  .footer-right a:hover {
+  .site-nav a:hover {
     color: var(--sage);
   }
 }

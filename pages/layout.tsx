@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { useFrontmatter } from "@void/md";
 import { Star } from "../src/components/drawings";
-import { PenArrow } from "../src/components/sketches";
 import "../src/styles/site.css";
 
 export default function Layout({ children }: { children: ReactNode }) {
@@ -43,12 +42,6 @@ export default function Layout({ children }: { children: ReactNode }) {
           <span className="micro">Ryan Miville</span>
         </div>
         <div className="footer-right">
-          <a href="https://github.com/ryanmiville">
-            GitHub <PenArrow />
-          </a>
-          <a href="mailto:ryanmiville@gmail.com">
-            Say hello <PenArrow />
-          </a>
           <label className="appearance-control">
             <span className="visually-hidden">Appearance</span>
             <select

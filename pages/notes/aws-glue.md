@@ -8,6 +8,7 @@ kind: "Raycast extension"
 icon: "cloud"
 slug: "aws-glue"
 section: "notes"
+draft: true
 topic: "Projects"
 layout: "project"
 ---

@@ -3,6 +3,7 @@ import { useFrontmatter } from "@void/md";
 import type { ReactNode } from "react";
 import { dateLabel, projects } from "../../src/content";
 import { PenArrow, ProjectIcon } from "../../src/components/sketches";
+import DraftNotice from "../../src/components/draft-notice";
 
 export default function ProjectLayout({ children }: { children: ReactNode }) {
   const fm = useFrontmatter();
@@ -10,10 +11,12 @@ export default function ProjectLayout({ children }: { children: ReactNode }) {
     (project) => project.path === `/notes/${String(fm.slug)}`,
   );
   const project = projects[index];
-  const next = projects[(index + 1) % projects.length];
+  const next =
+    projects.length > 1 ? projects[(index + 1) % projects.length] : undefined;
   return (
     <Layout>
       <article className="project-page">
+        <DraftNotice draft={fm.draft} />
         <a className="breadcrumb" href="/notes?topic=Projects">
           <PenArrow back /> All projects <span>/</span>{" "}
           {String(fm.kind ?? "Project")}

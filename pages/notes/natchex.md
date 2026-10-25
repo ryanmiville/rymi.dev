@@ -8,6 +8,7 @@ kind: "Scala library"
 icon: "trace"
 slug: "natchex"
 section: "notes"
+draft: true
 topic: "Projects"
 layout: "project"
 status: "Archived"

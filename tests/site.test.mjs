@@ -1,10 +1,14 @@
 import { after, before, test } from "node:test";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 import { readContent } from "../scripts/content.ts";
 
 const base = "http://127.0.0.1:5192";
+const pages = readContent();
+const published = pages.filter((page) => page.data.draft !== true);
+const drafts = pages.filter((page) => page.data.draft === true);
 let server;
 let logs = "";
 
@@ -24,7 +28,10 @@ before(async () => {
       "5192",
       "--strictPort",
     ],
-    { stdio: ["ignore", "pipe", "pipe"] },
+    {
+      stdio: ["ignore", "pipe", "pipe"],
+      env: { ...process.env, VOID_INSPECTOR_PORT: "false" },
+    },
   );
   server.stdout.on("data", (chunk) => {
     logs = (logs + chunk).slice(-5000);
@@ -49,12 +56,7 @@ after(() => {
 });
 
 test("every public page has the shared frame, a title, and its own canonical", async () => {
-  const paths = [
-    "/",
-    "/notes",
-    "/work",
-    ...readContent().map((page) => page.path),
-  ];
+  const paths = ["/", "/notes", "/work", ...published.map((page) => page.path)];
   const results = await Promise.all(
     paths.map(async (path) => {
       const response = await fetch(base + path);
@@ -140,11 +142,11 @@ test("feed, sitemap, fonts, scripts, and share image are served", async () => {
   assert.match(feed, /<rss version="2.0"/);
   assert.doesNotMatch(feed, /AstroPaper/);
   const sitemap = await (await fetch(base + "/sitemap.xml")).text();
-  for (const page of readContent())
+  for (const page of published)
     assert.ok(sitemap.includes(`https://rymi.dev${page.path}`), page.path);
   assert.ok(!sitemap.includes("/404"));
   assert.ok(!sitemap.includes("/projects"));
-  for (const page of readContent().filter((page) =>
+  for (const page of published.filter((page) =>
     page.path.startsWith("/notes/"),
   )) {
     assert.ok(
@@ -159,37 +161,103 @@ test("feed, sitemap, fonts, scripts, and share image are served", async () => {
   }
 });
 
-test("static reading pages avoid the full app runtime; interactive pages get their entry", async () => {
+test("home and archive show each published note once, including the empty state", async () => {
   const home = await (await fetch(base)).text();
   const homeEntries = [
     ...home.matchAll(/<a\b[^>]*href="(\/notes\/[^"?#]+)"/g),
   ].map((match) => match[1]);
-  assert.ok(homeEntries.length > 0, "Home features published notes");
+  assert.equal(
+    homeEntries.length,
+    Math.min(
+      3,
+      published.filter((page) => page.path.startsWith("/notes/")).length,
+    ),
+  );
   assert.equal(
     homeEntries.length,
     new Set(homeEntries).size,
     "Each home entry appears once across all subjects",
   );
   const about = await (await fetch(base + "/about")).text();
-  const project = await (await fetch(base + "/notes/dq")).text();
   const archive = await (await fetch(base + "/notes")).text();
   assert.doesNotMatch(home, /islands-client.*\.js/);
   assert.doesNotMatch(about, /islands-client.*\.js/);
   assert.match(archive, /islands-client.*\.js/);
-  assert.match(project, /md-client.*\.js/);
-  assert.match(project, /data-md-script="notes\/dq"/);
-  const switchboard = await (await fetch(base + "/notes/switchboard")).text();
-  assert.match(switchboard, /data-md-script="notes\/switchboard"/);
-  assert.match(switchboard, /aria-label="Explore the Switchboard handoff"/);
-  assert.match(switchboard, /<noscript><ol class="diagram-fallback">/);
-  assert.match(project, /class="project-page"/);
-  assert.match(project, /Source on GitHub/);
-  assert.match(project, /href="\/notes\?topic=Projects"/);
   assert.match(archive, /aria-label="Notebook"/);
-  assert.match(archive, /aria-label="Filter notes by subject"/);
-  assert.match(archive, /aria-label="Search notes"/);
+  if (published.some((page) => page.path.startsWith("/notes/"))) {
+    assert.match(archive, /aria-label="Filter notes by subject"/);
+    assert.match(archive, /aria-label="Search notes"/);
+  } else {
+    assert.match(home, /No notes published yet/);
+    assert.match(archive, /No notes published yet/);
+    assert.doesNotMatch(archive, /aria-label="Search notes"/);
+  }
   assert.equal(
     (archive.match(/class="archive-row"/g) || []).length,
-    readContent().filter((page) => page.path.startsWith("/notes/")).length,
+    published.filter((page) => page.path.startsWith("/notes/")).length,
+  );
+});
+
+test("draft URLs and their static variants return 404, including old project links", async () => {
+  for (const page of drafts) {
+    for (const path of [
+      page.path,
+      page.path + "/",
+      page.path + ".html",
+      page.path.replace("/notes/", "/projects/"),
+    ]) {
+      const response = await fetch(base + path);
+      assert.equal(response.status, 404, path);
+      assert.ok(!(await response.text()).includes(page.data.description), path);
+    }
+  }
+});
+
+test("draft metadata, bodies, and client scripts are absent from every production artifact", async () => {
+  const publicResponses = await Promise.all(
+    ["/", "/notes", "/rss.xml", "/sitemap.xml"].map(async (path) =>
+      (await fetch(base + path)).text(),
+    ),
+  );
+  function files(directory) {
+    return readdirSync(directory, { withFileTypes: true }).flatMap((entry) =>
+      entry.isDirectory()
+        ? files(join(directory, entry.name))
+        : [join(directory, entry.name)],
+    );
+  }
+  const artifacts = files("dist").filter((file) =>
+    /\.(?:html|js|mjs|map|json|xml)$/.test(file),
+  );
+  for (const page of drafts) {
+    const source = readFileSync(page.file, "utf8");
+    const paragraph = source
+      .split(/\n---\s*\n|^---\s*\n/)
+      .at(-1)
+      .trim()
+      .split("\n\n")[0];
+    for (const content of [
+      ...publicResponses,
+      ...artifacts.map((file) => readFileSync(file, "utf8")),
+    ]) {
+      assert.ok(
+        !content.includes(page.path),
+        `Draft route leaked: ${page.path}`,
+      );
+      assert.ok(
+        !content.includes(page.data.description),
+        `Draft description leaked: ${page.path}`,
+      );
+      assert.ok(
+        !content.includes(paragraph),
+        `Draft body leaked: ${page.path}`,
+      );
+    }
+  }
+  assert.ok(
+    !artifacts.some((file) =>
+      /md-client|switchboard|pipeline-diagram/.test(file),
+    ),
+    "No draft-only client entries",
   );
 });

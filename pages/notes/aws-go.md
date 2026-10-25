@@ -8,6 +8,7 @@ kind: "Go library"
 icon: "cloud"
 slug: "aws-go"
 section: "notes"
+draft: true
 topic: "Projects"
 layout: "project"
 ---

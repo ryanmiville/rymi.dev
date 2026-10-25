@@ -1,5 +1,5 @@
 import { defineHandler } from "void";
-import { notes } from "../src/content";
+import { publishedNotes as notes } from "../src/content";
 import { escapeXml } from "../src/xml";
 
 export const GET = defineHandler(

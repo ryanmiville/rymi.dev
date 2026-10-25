@@ -3,12 +3,14 @@ import { useFrontmatter } from "@void/md";
 import type { ReactNode } from "react";
 import { dateLabel } from "../../src/content";
 import { PenArrow } from "../../src/components/sketches";
+import DraftNotice from "../../src/components/draft-notice";
 
 export default function NoteLayout({ children }: { children: ReactNode }) {
   const fm = useFrontmatter();
   return (
     <Layout>
       <article className="article-page">
+        <DraftNotice draft={fm.draft} />
         <header className="article-head">
           <a className="breadcrumb" href="/notes">
             <PenArrow back /> All notes

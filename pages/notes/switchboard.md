@@ -13,6 +13,7 @@ kind: "macOS utility"
 icon: "trace"
 slug: "switchboard"
 section: "notes"
+draft: true
 topic: "Projects"
 layout: "project"
 ---

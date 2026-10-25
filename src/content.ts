@@ -9,16 +9,16 @@ export type Note = {
   tags: string[];
   kind: string;
   icon: string;
+  draft: boolean;
   repoURL?: string;
   demoURL?: string;
 };
 
 export type Project = Note & { repoURL: string };
 
-const published = pages.filter((page) => page.frontmatter.draft !== true);
 const text = (value: unknown) => (typeof value === "string" ? value : "");
 
-export const notes: Note[] = published
+const allNotes: Note[] = pages
   .filter((page) => page.path.startsWith("/notes/"))
   .map((page) => ({
     path: page.path,
@@ -31,10 +31,14 @@ export const notes: Note[] = published
       : [],
     kind: text(page.frontmatter.kind) || "Note",
     icon: text(page.frontmatter.icon) || "note",
+    draft: page.frontmatter.draft === true,
     repoURL: text(page.frontmatter.repoURL) || undefined,
     demoURL: text(page.frontmatter.demoURL) || undefined,
   }))
   .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+
+export const publishedNotes = allNotes.filter((note) => !note.draft);
+export const notes = import.meta.env.DEV ? allNotes : publishedNotes;
 
 export const projects = notes.filter(
   (note): note is Project => note.topic === "Projects" && Boolean(note.repoURL),

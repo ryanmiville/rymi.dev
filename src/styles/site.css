@@ -519,6 +519,9 @@ a:active .pen-arrow {
   font-size: 0.5625rem;
   text-align: right;
 }
+.preview-top .preview-draft {
+  display: none;
+}
 .note-preview h3 {
   font-size: 1.3125rem;
   line-height: 1.3;
@@ -668,6 +671,12 @@ a:active .pen-arrow {
 }
 .mobile-kind {
   display: none;
+}
+.draft-notice {
+  color: var(--accent2);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
 }
 .archive-status {
   margin-top: 19px;
@@ -1340,6 +1349,12 @@ a:active .pen-arrow {
   }
   .preview-top .micro {
     display: none;
+  }
+  .preview-top .preview-draft {
+    display: block;
+    margin-top: 7px;
+    text-align: left;
+    color: var(--accent2);
   }
   .note-preview h3 {
     font-size: 1.375rem;

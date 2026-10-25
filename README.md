@@ -19,11 +19,11 @@ npm run build
 npm test
 ```
 
-Or run all three with `npm run verify`. Tests start and stop their own production preview on port 5192. `npm run preview` serves the production build on port 5180; stop the development server first.
+Or run all three with `npm run verify`. Tests start and stop their own production and draft development servers on ports 5192–5194. `npm run preview` serves the production build on port 5180; stop the development server first.
 
 ## Content
 
-- `pages/notes/*.md`: all published notes, including project write-ups; automatically included in the notebook, home, RSS, and sitemap.
+- `pages/notes/*.md`: notes and project write-ups, including committed drafts. Published entries are automatically included in the notebook, home, RSS, and sitemap.
 - `pages/about.md`: personal introduction.
 - `content/experience.json`: work history.
 - `src/content.ts`: shared note metadata. The homepage shows the three latest entries once, across all subjects.
@@ -37,6 +37,7 @@ description: A short description of the idea.
 date: "2026-10-24"
 section: notes
 layout: note
+draft: true
 topic: Software
 tags: [software]
 ---
@@ -44,7 +45,13 @@ tags: [software]
 Write the note here. The layout supplies its title, description, and date.
 ```
 
-Keep drafts **outside `pages/`** until they are ready to publish. A Markdown file in `pages/` is a real public route; the content check rejects `draft: true` during development and build to prevent accidentally prerendering it.
+Use **`draft: true`** in frontmatter to keep a note unpublished while committing it in `pages/notes/`. `npm run dev` shows drafts in the home and Notes lists and at their normal URL, with a local preview label. Draft previews have `noindex, nofollow` and `no-store` headers. RSS and sitemap always exclude drafts.
+
+To publish, change it to `draft: false` or remove the field, then verify and deploy. Use YAML booleans without quotes; invalid values fail validation. Drafts use the same required metadata as published notes so their local previews work normally.
+
+`npm run build` and `npm run deploy` create a temporary source snapshot with draft Markdown and its server companions removed **before** Void scans routes, metadata, or client scripts. Production output contains no draft page, frontmatter, body, or draft-only client entry. The working tree is never renamed or changed, and old build files are cleared when replacing a successful build. `npm run preview` shows this production output, so draft URLs return 404 there. Raw `vite build` and `void deploy` fail if draft sources remain; always use the npm scripts.
+
+Keep draft-only images or downloads out of `public/`, whose files are always published. The draft flag controls site publication; it does not hide source files from people with repository access.
 
 The notebook starts with Everything and Projects. Other subject filters appear when a published note uses a new `topic`. A note without a topic belongs to Notes. Do not use Everything as a topic; it is the combined view.
 

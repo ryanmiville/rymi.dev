@@ -12,18 +12,23 @@ test("the site's real Markdown passes publication checks", () => {
   assert.ok(!pages.some((page) => page.path.startsWith("/projects/")));
 });
 
-test("a draft cannot silently become a prerendered public route", () => {
+test("drafts are valid content; ambiguous draft flags fail closed", () => {
   const directory = mkdtempSync(join(tmpdir(), "rymi-content-"));
   try {
     mkdirSync(join(directory, "notes"));
     writeFileSync(
       join(directory, "notes/private.md"),
-      "---\ntitle: Private draft\ndescription: Not published\ndraft: true\n---\nA draft.",
+      '---\ntitle: Private draft\ndescription: Not published\ndate: "2026-10-24"\nsection: notes\nlayout: note\ndraft: true\n---\nA draft.',
     );
-    assert.throws(
-      () => validateContent(directory),
-      /Keep unpublished drafts outside pages/,
-    );
+    const file = join(directory, "notes/private.md");
+    assert.equal(validateContent(directory)[0].data.draft, true);
+    for (const flag of ['"true"', '"false"', "yes", "1", "null", ""]) {
+      writeFileSync(
+        file,
+        `---\ntitle: Draft\ndescription: Draft\ndraft: ${flag}\n---\nText`,
+      );
+      assert.throws(() => validateContent(directory), /YAML boolean/);
+    }
   } finally {
     rmSync(directory, { recursive: true });
   }

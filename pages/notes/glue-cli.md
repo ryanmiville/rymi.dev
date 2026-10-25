@@ -8,6 +8,7 @@ kind: "Command line"
 icon: "terminal"
 slug: "glue-cli"
 section: "notes"
+draft: true
 topic: "Projects"
 layout: "project"
 ---

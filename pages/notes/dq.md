@@ -13,6 +13,7 @@ kind: "Command line"
 icon: "terminal"
 slug: "dq"
 section: "notes"
+draft: true
 topic: "Projects"
 layout: "project"
 ---

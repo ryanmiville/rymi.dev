@@ -9,6 +9,7 @@ kind: "Music & web"
 icon: "music"
 slug: "fantano-fetcher"
 section: "notes"
+draft: true
 topic: "Projects"
 layout: "project"
 ---

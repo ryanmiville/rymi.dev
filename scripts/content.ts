@@ -39,10 +39,8 @@ export function validateContent(pagesDir?: string) {
     const fail = (message: string): never => {
       throw new Error(`${page.path}: ${message}`);
     };
-    if (page.data.draft === true)
-      fail(
-        "Keep unpublished drafts outside pages/. Every Markdown file in pages/ is a public route.",
-      );
+    if (page.data.draft !== undefined && typeof page.data.draft !== "boolean")
+      fail("Use draft: true or draft: false (a YAML boolean, without quotes).");
     for (const key of ["title", "description"]) {
       if (typeof page.data[key] !== "string" || !page.data[key].trim())
         fail(`Missing ${key} frontmatter.`);
@@ -85,4 +83,14 @@ export function validateContent(pagesDir?: string) {
     }
   }
   return pages;
+}
+
+export function assertProductionSource(root: string) {
+  const drafts = validateContent(join(root, "pages")).filter(
+    (page) => page.data.draft === true,
+  );
+  if (drafts.length)
+    throw new Error(
+      "Drafts must be excluded before Void scans pages. Use npm run build or npm run deploy.",
+    );
 }

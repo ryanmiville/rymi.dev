@@ -4,14 +4,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 5180",
-    "build": "vite build",
+    "build": "node scripts/production.mjs build",
     "preview": "vite preview --host 0.0.0.0 --port 5180",
     "postinstall": "void prepare",
     "typecheck": "void prepare && tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
     "og": "node scripts/generate-og.mjs",
     "verify": "npm run typecheck && npm run build && npm test",
-    "deploy": "void deploy --platform cloudflare"
+    "deploy": "node scripts/production.mjs deploy"
   },
   "dependencies": {
     "react": "19.2.4",

@@ -20,3 +20,8 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 .vercel
+.void/
+.wrangler/
+.void-wrangler.jsonc
+.env.*
+!.env.example

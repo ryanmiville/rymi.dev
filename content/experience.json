@@ -1,0 +1,38 @@
+[
+  {
+    "company": "CareerBuilder",
+    "role": "Software Engineer III",
+    "dateStart": "05/14/2013",
+    "dateEnd": "08/01/2017"
+  },
+  {
+    "company": "DemandScience",
+    "role": "Technical Lead Engineer",
+    "dateStart": "09/25/2023",
+    "dateEnd": "10/01/2025"
+  },
+  {
+    "company": "Horizon3.ai",
+    "role": "Staff Software Engineer",
+    "dateStart": "10/01/2025",
+    "dateEnd": "current"
+  },
+  {
+    "company": "SecurityScorecard",
+    "role": "Staff Software Engineer",
+    "dateStart": "04/26/2021",
+    "dateEnd": "09/15/2023"
+  },
+  {
+    "company": "Terminus",
+    "role": "Sr. Software Engineer",
+    "dateStart": "10/01/2018",
+    "dateEnd": "04/23/2021"
+  },
+  {
+    "company": "Travel Syndication Technology",
+    "role": "Sr. Software Engineer",
+    "dateStart": "08/07/2017",
+    "dateEnd": "09/28/2018"
+  }
+]

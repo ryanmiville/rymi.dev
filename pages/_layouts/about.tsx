@@ -7,7 +7,6 @@ export default function AboutLayout({ children }: { children: ReactNode }) {
   return (
     <Layout>
       <article className="about-page">
-        <span className="eyebrow">A person behind the projects</span>
         <h1 className="page-title">
           A bit
           <br />

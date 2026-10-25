@@ -82,7 +82,15 @@ export function ProjectIcon({ name = "terminal" }: { name?: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      {name === "music" ? (
+      {name === "note" ? (
+        <>
+          <path
+            d="M16 6Q35 4 49 7L58 17L56 48Q34 50 15 47Z"
+            fill="var(--soft)"
+          />
+          <path d="M49 7L48 18L58 17M23 23L47 22M23 30L46 30M23 38L39 37" />
+        </>
+      ) : name === "music" ? (
         <>
           <path d="M13 8Q33 4 56 8L57 46Q35 50 14 45Z" fill="var(--soft3)" />
           <path d="M20 12Q36 9 51 12M20 42L49 42" opacity=".5" />

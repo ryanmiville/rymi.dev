@@ -7,7 +7,8 @@ category: "Tools"
 kind: "Raycast extension"
 icon: "cloud"
 slug: "aws-glue"
-section: "projects"
+section: "notes"
+topic: "Projects"
 layout: "project"
 ---
 

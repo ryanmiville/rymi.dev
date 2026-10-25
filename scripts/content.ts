@@ -47,15 +47,28 @@ export function validateContent(pagesDir?: string) {
       if (typeof page.data[key] !== "string" || !page.data[key].trim())
         fail(`Missing ${key} frontmatter.`);
     }
-    const kind = page.path.startsWith("/projects/")
-      ? "project"
-      : page.path.startsWith("/notes/")
-        ? "note"
-        : null;
-    if (!kind) continue;
+    if (page.path.startsWith("/projects/"))
+      fail("Publish project write-ups in notes/ with topic: Projects.");
+    if (!page.path.startsWith("/notes/")) continue;
+    const kind = page.data.topic === "Projects" ? "project" : "note";
     if (page.data.layout !== kind) fail(`Use layout: ${kind}.`);
-    if (page.data.section !== (kind === "project" ? "projects" : "notes"))
-      fail("Set section to the archive name for navigation.");
+    if (page.data.section !== "notes")
+      fail("Set section: notes for navigation.");
+    if (
+      page.data.topic !== undefined &&
+      (typeof page.data.topic !== "string" ||
+        !page.data.topic.trim() ||
+        page.data.topic === "Everything")
+    )
+      fail(
+        "Use a nonempty topic; Everything is reserved for the archive filter.",
+      );
+    if (
+      page.data.tags !== undefined &&
+      (!Array.isArray(page.data.tags) ||
+        page.data.tags.some((tag: unknown) => typeof tag !== "string"))
+    )
+      fail("Tags must be an array of strings.");
     if (
       typeof page.data.date !== "string" ||
       !/^\d{4}-\d{2}-\d{2}$/.test(page.data.date) ||

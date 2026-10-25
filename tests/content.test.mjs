@@ -8,7 +8,8 @@ import { readContent, validateContent } from "../scripts/content.ts";
 test("the site's real Markdown passes publication checks", () => {
   const pages = validateContent();
   assert.ok(pages.some((page) => page.path === "/about"));
-  assert.ok(pages.some((page) => page.path === "/projects/dq"));
+  assert.ok(pages.some((page) => page.path === "/notes/dq"));
+  assert.ok(!pages.some((page) => page.path.startsWith("/projects/")));
 });
 
 test("a draft cannot silently become a prerendered public route", () => {
@@ -29,7 +30,27 @@ test("a draft cannot silently become a prerendered public route", () => {
 });
 
 test("Markdown client scripts do not hide the frontmatter from validation", () => {
-  const dq = readContent().find((page) => page.path === "/projects/dq");
+  const dq = readContent().find((page) => page.path === "/notes/dq");
   assert.equal(dq.data.layout, "project");
+  assert.equal(dq.data.section, "notes");
+  assert.equal(dq.data.topic, "Projects");
   assert.equal(dq.data.slug, "dq");
+});
+
+test("ordinary articles can add subjects without project metadata", () => {
+  const directory = mkdtempSync(join(tmpdir(), "rymi-article-"));
+  try {
+    mkdirSync(join(directory, "notes"));
+    const file = join(directory, "notes/listening.md");
+    const article =
+      '---\ntitle: Listening notes\ndescription: A few observations\ndate: "2026-10-24"\nsection: notes\nlayout: note\ntopic: Music\ntags: [listening]\n---\nA note.';
+    writeFileSync(file, article);
+    const [page] = validateContent(directory);
+    assert.equal(page.path, "/notes/listening");
+    assert.equal(page.data.topic, "Music");
+    writeFileSync(file, article.replace("topic: Music", "topic: Everything"));
+    assert.throws(() => validateContent(directory), /Everything is reserved/);
+  } finally {
+    rmSync(directory, { recursive: true });
+  }
 });

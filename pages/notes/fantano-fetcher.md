@@ -8,7 +8,8 @@ category: "Apps"
 kind: "Music & web"
 icon: "music"
 slug: "fantano-fetcher"
-section: "projects"
+section: "notes"
+topic: "Projects"
 layout: "project"
 ---
 

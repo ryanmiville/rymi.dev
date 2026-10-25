@@ -17,11 +17,8 @@ export default function Layout({ children }: { children: ReactNode }) {
           <span>Ryan Miville</span>
         </a>
         <nav className="site-nav" aria-label="Main navigation">
-          <a
-            href="/projects"
-            aria-current={fm.section === "projects" ? "page" : undefined}
-          >
-            Projects
+          <a href="/" aria-current={fm.section === "home" ? "page" : undefined}>
+            Home
           </a>
           <a
             href="/notes"

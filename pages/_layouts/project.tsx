@@ -7,14 +7,14 @@ import { PenArrow, ProjectIcon } from "../../src/components/sketches";
 export default function ProjectLayout({ children }: { children: ReactNode }) {
   const fm = useFrontmatter();
   const index = projects.findIndex(
-    (project) => project.path === `/projects/${String(fm.slug)}`,
+    (project) => project.path === `/notes/${String(fm.slug)}`,
   );
   const project = projects[index];
   const next = projects[(index + 1) % projects.length];
   return (
     <Layout>
       <article className="project-page">
-        <a className="breadcrumb" href="/projects">
+        <a className="breadcrumb" href="/notes?topic=Projects">
           <PenArrow back /> All projects <span>/</span>{" "}
           {String(fm.kind ?? "Project")}
         </a>

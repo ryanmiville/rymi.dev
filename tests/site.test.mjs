@@ -51,7 +51,6 @@ after(() => {
 test("every public page has the shared frame, a title, and its own canonical", async () => {
   const paths = [
     "/",
-    "/projects",
     "/notes",
     "/work",
     ...readContent().map((page) => page.path),
@@ -63,6 +62,7 @@ test("every public page has the shared frame, a title, and its own canonical", a
       const html = await response.text();
       assert.match(html, /<title>[^<]+Ryan Miville<\/title>/, path);
       assert.match(html, /aria-label="Main navigation"/, path);
+      assert.match(html, /href="\/"[^>]*>Home<\/a>/, path);
       assert.match(html, /<main[^>]+id="main-content"/, path);
       assert.match(html, /<footer/, path);
       assert.ok(
@@ -105,7 +105,12 @@ test("legacy archive and sitemap URLs retain useful destinations", async () => {
   for (const [path, destination] of [
     ["/posts/", "/notes"],
     ["/tags/", "/notes"],
-    ["/search/", "/projects"],
+    ["/search/", "/notes"],
+    ["/projects", "/notes?topic=Projects"],
+    ["/projects/", "/notes?topic=Projects"],
+    ...readContent()
+      .filter((page) => page.data.topic === "Projects")
+      .map((page) => [page.path.replace("/notes/", "/projects/"), page.path]),
     ["/sitemap-index.xml", "/sitemap.xml"],
     ["/sitemap-0.xml", "/sitemap.xml"],
   ]) {
@@ -113,6 +118,10 @@ test("legacy archive and sitemap URLs retain useful destinations", async () => {
     assert.equal(response.status, 301, path);
     assert.equal(response.headers.get("location"), destination, path);
   }
+  const legacyQuery = await fetch(base + "/projects/dq?ref=bookmark", {
+    redirect: "manual",
+  });
+  assert.equal(legacyQuery.headers.get("location"), "/notes/dq?ref=bookmark");
 });
 
 test("feed, sitemap, fonts, scripts, and share image are served", async () => {
@@ -134,16 +143,37 @@ test("feed, sitemap, fonts, scripts, and share image are served", async () => {
   for (const page of readContent())
     assert.ok(sitemap.includes(`https://rymi.dev${page.path}`), page.path);
   assert.ok(!sitemap.includes("/404"));
+  assert.ok(!sitemap.includes("/projects"));
+  for (const page of readContent().filter((page) =>
+    page.path.startsWith("/notes/"),
+  )) {
+    assert.ok(
+      feed.includes(`https://rymi.dev${page.path}`),
+      `Feed includes ${page.path}`,
+    );
+    assert.equal(
+      sitemap.split(`<loc>https://rymi.dev${page.path}</loc>`).length - 1,
+      1,
+      `One sitemap entry for ${page.path}`,
+    );
+  }
 });
 
 test("static reading pages avoid the full app runtime; interactive pages get their entry", async () => {
   const home = await (await fetch(base)).text();
   const about = await (await fetch(base + "/about")).text();
-  const project = await (await fetch(base + "/projects/dq")).text();
-  const archive = await (await fetch(base + "/projects")).text();
+  const project = await (await fetch(base + "/notes/dq")).text();
+  const archive = await (await fetch(base + "/notes")).text();
   assert.doesNotMatch(home, /islands-client.*\.js/);
   assert.doesNotMatch(about, /islands-client.*\.js/);
   assert.match(archive, /islands-client.*\.js/);
   assert.match(project, /md-client.*\.js/);
-  assert.match(project, /data-md-script="projects\/dq"/);
+  assert.match(project, /data-md-script="notes\/dq"/);
+  assert.match(project, /class="project-page"/);
+  assert.match(project, /Source on GitHub/);
+  assert.match(project, /href="\/notes\?topic=Projects"/);
+  assert.match(archive, /aria-label="Notebook"/);
+  assert.match(archive, /aria-label="Filter notes by subject"/);
+  assert.match(archive, /aria-label="Search notes"/);
+  assert.equal((archive.match(/class="archive-row"/g) || []).length, 6);
 });

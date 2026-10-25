@@ -7,7 +7,8 @@ category: "Tools"
 kind: "Command line"
 icon: "terminal"
 slug: "glue-cli"
-section: "projects"
+section: "notes"
+topic: "Projects"
 layout: "project"
 ---
 

@@ -4,7 +4,8 @@ export const head = defineHead(() => ({
   meta: [
     {
       name: "description",
-      content: "Notes on software, music, and art by Ryan Miville.",
+      content:
+        "Project write-ups and notes on software, music, and art by Ryan Miville.",
     },
   ],
 }));

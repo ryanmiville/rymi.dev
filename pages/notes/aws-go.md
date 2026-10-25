@@ -7,7 +7,8 @@ category: "Libraries"
 kind: "Go library"
 icon: "cloud"
 slug: "aws-go"
-section: "projects"
+section: "notes"
+topic: "Projects"
 layout: "project"
 ---
 

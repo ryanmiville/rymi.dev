@@ -23,8 +23,7 @@ Or run all three with `npm run verify`. Tests start and stop their own productio
 
 ## Content
 
-- `pages/projects/*.md`: project descriptions and metadata; the archive and curated homepage read `@void/md/pages`.
-- `pages/notes/*.md`: published notes, automatically included in the notebook, home, RSS, and sitemap.
+- `pages/notes/*.md`: all published notes, including project write-ups; automatically included in the notebook, home, RSS, and sitemap.
 - `pages/about.md`: personal introduction.
 - `content/experience.json`: work history.
 - `src/content.ts`: archive metadata and the three selected homepage projects.
@@ -38,6 +37,7 @@ description: A short description of the idea.
 date: "2026-10-24"
 section: notes
 layout: note
+topic: Software
 tags: [software]
 ---
 
@@ -46,13 +46,17 @@ Write the note here. The layout supplies its title, description, and date.
 
 Keep drafts **outside `pages/`** until they are ready to publish. A Markdown file in `pages/` is a real public route; the content check rejects `draft: true` during development and build to prevent accidentally prerendering it.
 
-Projects use `layout: project`, `section: projects`, a `slug` matching their filename, and `category`, `kind`, `icon`, `repoURL`, and optional `demoURL` metadata. Available sketch icons are `terminal`, `music`, `cloud`, and `trace`.
+The notebook starts with Everything and Projects. Other subject filters appear when a published note uses a new `topic`. A note without a topic belongs to Notes. Do not use Everything as a topic; it is the combined view.
+
+Project write-ups also live in `pages/notes/`, with `topic: Projects`, `section: notes`, and `layout: project` to preserve the project-page design. They retain a `slug` matching their filename and `category`, `kind`, `icon`, `repoURL`, and optional `demoURL` metadata. Available project sketch icons are `terminal`, `music`, `cloud`, and `trace`; ordinary notes use a page sketch by default.
+
+`/projects` redirects to `/notes?topic=Projects`. Old `/projects/<slug>` links redirect to the corresponding `/notes/<slug>` route. Search and selected subject are saved in the URL so filtered views can be linked and reloaded.
 
 The app imports `@void/md/theme-content.css`; prose is scoped to `.void-md` and uses Cobalt’s typography and color tokens. Markdown client scripts use the `@/` alias for source imports. The dq diagram is progressively enhanced through that supported client-script path; its initial explanation also renders without JavaScript.
 
 ## Design
 
-Follow [design.md](./design.md). Shared sketches are authored SVG paths, and Caveat is self-hosted with its license in `public/fonts/OFL.txt`. Light, dark, and system appearance are available in the footer. Static reading pages ship HTML; the project archive adds a React island for search and category filters.
+Follow [design.md](./design.md). Shared sketches are authored SVG paths, and Caveat is self-hosted with its license in `public/fonts/OFL.txt`. Light, dark, and system appearance are available in the footer. Static reading pages ship HTML; the notebook adds a React island for search and subject filters.
 
 The art/code Venn illustration is saved as `ArtCodeSketch` in `src/components/sketches.tsx`, with its `.about-venn` styles in `src/styles/site.css`. It is currently unused and available for future placement.
 

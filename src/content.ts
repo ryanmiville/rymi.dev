@@ -1,42 +1,22 @@
 import pages from "@void/md/pages";
 
-export type Project = {
-  path: string;
-  title: string;
-  description: string;
-  date: string;
-  category: string;
-  kind: string;
-  icon: string;
-  repoURL: string;
-  demoURL?: string;
-};
-
 export type Note = {
   path: string;
   title: string;
   description: string;
   date: string;
+  topic: string;
   tags: string[];
+  kind: string;
+  icon: string;
+  repoURL?: string;
+  demoURL?: string;
 };
+
+export type Project = Note & { repoURL: string };
 
 const published = pages.filter((page) => page.frontmatter.draft !== true);
 const text = (value: unknown) => (typeof value === "string" ? value : "");
-
-export const projects: Project[] = published
-  .filter((page) => page.path.startsWith("/projects/"))
-  .map((page) => ({
-    path: page.path,
-    title: page.title,
-    description: text(page.frontmatter.description),
-    date: text(page.frontmatter.date),
-    category: text(page.frontmatter.category),
-    kind: text(page.frontmatter.kind),
-    icon: text(page.frontmatter.icon),
-    repoURL: text(page.frontmatter.repoURL),
-    demoURL: text(page.frontmatter.demoURL) || undefined,
-  }))
-  .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
 
 export const notes: Note[] = published
   .filter((page) => page.path.startsWith("/notes/"))
@@ -45,17 +25,24 @@ export const notes: Note[] = published
     title: page.title,
     description: text(page.frontmatter.description),
     date: text(page.frontmatter.date),
+    topic: text(page.frontmatter.topic) || "Notes",
     tags: Array.isArray(page.frontmatter.tags)
       ? page.frontmatter.tags.map(String)
       : [],
+    kind: text(page.frontmatter.kind) || "Note",
+    icon: text(page.frontmatter.icon) || "note",
+    repoURL: text(page.frontmatter.repoURL) || undefined,
+    demoURL: text(page.frontmatter.demoURL) || undefined,
   }))
   .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
 
+export const projects = notes.filter(
+  (note): note is Project => note.topic === "Projects" && Boolean(note.repoURL),
+);
+
 // Keep the home curated independently of archive growth.
 export const selectedProjects = ["dq", "fantano-fetcher", "aws-glue"]
-  .map((slug) =>
-    projects.find((project) => project.path === `/projects/${slug}`),
-  )
+  .map((slug) => projects.find((project) => project.path === `/notes/${slug}`))
   .filter((project): project is Project => Boolean(project));
 
 export function dateLabel(value: string) {

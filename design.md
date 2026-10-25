@@ -19,13 +19,14 @@ Choose the composition around what the visitor came to do.
 | Surface | Visitor’s job | Composition |
 | --- | --- | --- |
 | Home | Understand Ryan’s interests and find something worth exploring | Brief introduction, one art-and-code illustration, three selected projects, recent notes |
-| Work archive | Scan an expanding body of work | Searchable, filterable rows with project icon, name, description, category, and drawn arrow |
-| Project | Understand the problem, idea, and experience | Clear introduction and context, readable prose, a sketch diagram, a next-project link |
-| Notes archive | Find a thought worth reading | Titles and short descriptions in a simple list |
+| Notebook | Find project write-ups and articles | Searchable, filterable rows with a sketch icon, title, description, subject or project kind, and drawn arrow |
+| Project note | Understand the problem, idea, and experience | Preserve the project layout: clear introduction, metadata, readable prose, diagrams, and a next-project link |
 | Article | Follow an idea comfortably | Reading column, clear subheads, occasional explanatory diagrams and margin notes |
-| About | Meet the person behind the work | Personal introduction, interests, and a restrained art/code overlap illustration |
+| About | Meet the person behind the work | Personal introduction, work history, and contact links; the art/code illustration is saved for later reuse |
 
 Keep the homepage curated as the collection grows. The archive holds the full collection. A spatial map can be a secondary way to explore relationships; it must not become the only way to find entries or require rearranging the entire site whenever an entry is added.
+
+Navigation is Home, Notes, About. Notes combines projects and writing, starting with Everything and Projects filters. Additional subject tabs come from published content. Project notes keep the established project-page design.
 
 ## Identity in five decisions
 

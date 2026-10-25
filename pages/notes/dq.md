@@ -12,7 +12,8 @@ category: "Tools"
 kind: "Command line"
 icon: "terminal"
 slug: "dq"
-section: "projects"
+section: "notes"
+topic: "Projects"
 layout: "project"
 ---
 

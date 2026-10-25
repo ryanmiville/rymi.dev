@@ -11,7 +11,7 @@ export default function NotFound() {
       </h1>
       <p>
         This address doesn’t lead to a page. You can start again from home or
-        browse my projects.
+        browse my notes.
       </p>
       <RoughLink href="/">Back home</RoughLink>
     </section>

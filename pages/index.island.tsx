@@ -3,6 +3,8 @@ import { DeskArt, Orbit } from "../src/components/drawings";
 import { MarginLoop, PenArrow, RoughLink } from "../src/components/sketches";
 import ProjectPreview from "../src/components/project-preview";
 
+export const frontmatter = { section: "home" };
+
 export default function Home() {
   return (
     <>
@@ -19,7 +21,9 @@ export default function Home() {
             occasionally try to merge these things into something interesting.
           </p>
           <div className="home-actions">
-            <RoughLink href="/projects">Explore my projects</RoughLink>
+            <RoughLink href="/notes?topic=Projects">
+              Explore my projects
+            </RoughLink>
             <a className="text-link" href="/about">
               About me
             </a>
@@ -33,7 +37,7 @@ export default function Home() {
       <section aria-labelledby="selected-work">
         <div className="section-top">
           <h2 id="selected-work">A few things I’ve made</h2>
-          <a className="text-link" href="/projects">
+          <a className="text-link" href="/notes?topic=Projects">
             All projects <PenArrow />
           </a>
         </div>

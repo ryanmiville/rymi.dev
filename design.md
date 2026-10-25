@@ -107,7 +107,7 @@ Titles may wrap. Never clip ascenders or descenders to force a fixed height. Pro
 - Space hero and major sections generously; reference gaps are 35–65px. Use approximately 20–30px around related groups and 7–16px within small components.
 - Use thin rules and spacing to separate archive rows. Avoid enclosing every project, note, or paragraph in a card.
 - Keep titles, descriptions, and destinations readable as content grows. Use `minmax(0, 1fr)`, `min-width: 0`, and wrapping where needed.
-- There is no footer. Keep appearance in the header: a hand-drawn sun/moon icon opens System theme, Light, and Dark choices. Default to System theme, and preserve explicit user choices. Reserve space for fixed controls only when those controls are actually present.
+- There is no footer. Keep appearance in the header: a hand-drawn sun/moon button toggles directly between light and dark, with no dropdown. Follow the system theme until the visitor makes an explicit choice, then preserve that choice. Reserve space for fixed controls only when those controls are actually present.
 
 ## Drawing vocabulary
 

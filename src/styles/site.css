@@ -224,25 +224,18 @@ a:active .pen-arrow {
   min-width: 0;
 }
 .appearance {
-  position: relative;
-  flex-shrink: 0;
-  z-index: 10;
-}
-.appearance summary {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: 44px;
   height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
   color: var(--muted);
-  list-style: none;
-  cursor: pointer;
-  touch-action: manipulation;
 }
-.appearance summary::-webkit-details-marker {
-  display: none;
-}
-.appearance summary:active {
+.appearance:active {
   color: var(--sage);
 }
 .appearance-icon {
@@ -258,40 +251,6 @@ a:active .pen-arrow {
 }
 :root[data-theme="dark"] .appearance-moon {
   display: block;
-}
-.appearance .appearance-menu {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 8px);
-  width: 170px;
-  padding: 8px;
-  --surface: var(--paper);
-}
-.appearance-menu button {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 44px;
-  padding: 8px 12px;
-  background: none;
-  border: 0;
-  color: var(--muted);
-  font-size: 0.8125rem;
-  text-align: left;
-}
-.appearance-menu button[aria-pressed="true"] {
-  color: var(--sage);
-  background: var(--soft);
-}
-.appearance-menu button[aria-pressed="true"]::after {
-  content: "";
-  width: 5px;
-  height: 9px;
-  border-right: 1.5px solid currentColor;
-  border-bottom: 1.5px solid currentColor;
-  transform: rotate(40deg);
-  margin-left: 12px;
 }
 .site-nav {
   display: flex;
@@ -1247,8 +1206,7 @@ a:active .pen-arrow {
   .wordmark:hover svg {
     transform: rotate(15deg);
   }
-  .appearance summary:hover,
-  .appearance-menu button:hover,
+  .appearance:hover,
   .home-socials a:hover {
     color: var(--sage);
   }

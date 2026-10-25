@@ -20,20 +20,7 @@ function browser({ dark = false, saved, unavailable = false } = {}) {
       this.events[type] = handler;
     },
   });
-  const choices = ["system", "light", "dark"].map((value) =>
-    element({ dataset: { appearance: value } }),
-  );
-  const trigger = element({
-    focus() {
-      this.focused = true;
-    },
-  });
-  const control = element({
-    open: false,
-    querySelector: () => trigger,
-    querySelectorAll: () => choices,
-    contains: (target) => [trigger, ...choices].includes(target),
-  });
+  const control = element();
   const media = element({ matches: dark });
   const color = element();
   let ready = false;
@@ -55,10 +42,6 @@ function browser({ dark = false, saved, unavailable = false } = {}) {
       if (unavailable) throw new Error("Storage blocked");
       storage.set(key, value);
     },
-    removeItem(key) {
-      if (unavailable) throw new Error("Storage blocked");
-      storage.delete(key);
-    },
   };
   runInNewContext(script, { window, document, localStorage });
   return {
@@ -67,22 +50,15 @@ function browser({ dark = false, saved, unavailable = false } = {}) {
     media,
     color,
     control,
-    trigger,
     storage,
     theme: () => document.documentElement.dataset.theme,
     boot() {
       ready = true;
       document.events.DOMContentLoaded();
     },
-    choose(value) {
-      choices
-        .find((button) => button.dataset.appearance === value)
-        .events.click();
+    toggle() {
+      control.events.click();
     },
-    selected: () =>
-      choices
-        .filter((button) => button.attributes["aria-pressed"] === "true")
-        .map((button) => button.dataset.appearance),
     systemDark(value) {
       media.matches = value;
       media.events.change();
@@ -90,44 +66,66 @@ function browser({ dark = false, saved, unavailable = false } = {}) {
   };
 }
 
-test("new visitors follow system appearance before first paint and when the OS changes", () => {
+test("new visitors follow the system before first paint and when the OS changes", () => {
   for (const dark of [false, true]) {
     const page = browser({ dark });
     assert.equal(page.theme(), dark ? "dark" : "light");
     assert.equal(page.document.documentElement.style.colorScheme, page.theme());
     page.boot();
-    assert.deepEqual(page.selected(), ["system"]);
     assert.equal(
-      page.trigger.attributes["aria-label"],
-      "Appearance: System theme",
+      page.control.attributes["aria-label"],
+      dark ? "Switch to light mode" : "Switch to dark mode",
     );
     page.systemDark(!dark);
     assert.equal(page.theme(), dark ? "light" : "dark");
     assert.equal(page.color.attributes.content, dark ? "#fffdf8" : "#171d2b");
-    assert.equal(page.storage.size, 0, "Automatic mode stores no override");
+    assert.equal(
+      page.storage.size,
+      0,
+      "Following the system stores no override",
+    );
   }
 });
 
-test("manual choices persist, override OS changes, and can return to automatic mode", () => {
+test("each click flips the resolved theme and becomes an explicit preference", () => {
+  for (const dark of [false, true]) {
+    const page = browser({ dark });
+    page.boot();
+    page.toggle();
+    assert.equal(page.theme(), dark ? "light" : "dark");
+    assert.equal(page.storage.get("rymi-appearance"), page.theme());
+    page.systemDark(!dark);
+    page.systemDark(dark);
+    assert.equal(
+      page.theme(),
+      dark ? "light" : "dark",
+      "OS changes do not override a manual choice",
+    );
+    page.toggle();
+    assert.equal(page.theme(), dark ? "dark" : "light");
+    assert.equal(page.storage.get("rymi-appearance"), page.theme());
+  }
+});
+
+test("saved choices persist and clicking reverses the saved theme rather than the OS theme", () => {
   const page = browser({ dark: true, saved: "light" });
   assert.equal(page.theme(), "light");
   page.boot();
-  assert.deepEqual(page.selected(), ["light"]);
-  page.systemDark(false);
-  page.systemDark(true);
-  assert.equal(page.theme(), "light");
-  page.control.open = true;
-  page.choose("dark");
+  page.toggle();
   assert.equal(page.theme(), "dark");
-  assert.equal(page.storage.get("rymi-appearance"), "dark");
-  assert.deepEqual(page.selected(), ["dark"]);
-  assert.equal(page.control.open, false);
-  assert.equal(page.trigger.focused, true);
-  page.choose("system");
-  assert.equal(page.storage.has("rymi-appearance"), false);
-  assert.deepEqual(page.selected(), ["system"]);
-  page.systemDark(false);
-  assert.equal(page.theme(), "light");
+  assert.equal(page.control.attributes["aria-label"], "Switch to light mode");
+  const reloaded = browser({
+    dark: false,
+    saved: page.storage.get("rymi-appearance"),
+  });
+  reloaded.boot();
+  assert.equal(reloaded.theme(), "dark");
+  reloaded.toggle();
+  assert.equal(reloaded.theme(), "light");
+  assert.equal(
+    reloaded.control.attributes["aria-label"],
+    "Switch to dark mode",
+  );
 });
 
 test("other tabs can change or clear the saved appearance", () => {
@@ -135,37 +133,23 @@ test("other tabs can change or clear the saved appearance", () => {
   page.boot();
   page.window.events.storage({ key: "rymi-appearance", newValue: "light" });
   assert.equal(page.theme(), "light");
-  assert.deepEqual(page.selected(), ["light"]);
+  assert.equal(page.control.attributes["aria-label"], "Switch to dark mode");
   page.window.events.storage({ key: "unrelated", newValue: "dark" });
   assert.equal(page.theme(), "light");
   page.window.events.storage({ key: null, newValue: null });
   assert.equal(page.theme(), "dark");
-  assert.deepEqual(page.selected(), ["system"]);
+  page.systemDark(false);
+  assert.equal(page.theme(), "light");
 });
 
-test("unavailable storage and invalid saved values still allow theme switching", () => {
+test("blocked storage and invalid saved values still allow repeated toggles", () => {
   for (const options of [{ saved: "unexpected" }, { unavailable: true }]) {
     const page = browser({ ...options, dark: true });
     page.boot();
     assert.equal(page.theme(), "dark");
-    assert.deepEqual(page.selected(), ["system"]);
-    page.choose("light");
+    page.toggle();
     assert.equal(page.theme(), "light");
-    page.choose("system");
+    page.toggle();
     assert.equal(page.theme(), "dark");
   }
-});
-
-test("Escape returns focus to the icon; clicking outside closes without stealing focus", () => {
-  const page = browser();
-  page.boot();
-  page.control.open = true;
-  page.document.events.keydown({ key: "Escape" });
-  assert.equal(page.control.open, false);
-  assert.equal(page.trigger.focused, true);
-  page.trigger.focused = false;
-  page.control.open = true;
-  page.document.events.click({ target: {} });
-  assert.equal(page.control.open, false);
-  assert.equal(page.trigger.focused, false);
 });

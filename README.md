@@ -52,7 +52,7 @@ Project write-ups also live in `pages/notes/`, with `topic: Projects`, `section:
 
 `/projects` redirects to `/notes?topic=Projects`. Old `/projects/<slug>` links redirect to the corresponding `/notes/<slug>` route. Search and selected subject are saved in the URL so filtered views can be linked and reloaded.
 
-The app imports `@void/md/theme-content.css`; prose is scoped to `.void-md` and uses Cobalt’s typography and color tokens. Markdown client scripts use the `@/` alias for source imports. The dq diagram is progressively enhanced through that supported client-script path; its initial explanation also renders without JavaScript.
+The app imports `@void/md/theme-content.css`; prose is scoped to `.void-md` and uses Cobalt’s typography and color tokens. Markdown client scripts use the `@/` alias for source imports. The dq and Switchboard diagrams are progressively enhanced through that supported client-script path; all explanations also render without JavaScript.
 
 ## Design
 

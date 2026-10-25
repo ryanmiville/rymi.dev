@@ -178,6 +178,10 @@ test("static reading pages avoid the full app runtime; interactive pages get the
   assert.match(archive, /islands-client.*\.js/);
   assert.match(project, /md-client.*\.js/);
   assert.match(project, /data-md-script="notes\/dq"/);
+  const switchboard = await (await fetch(base + "/notes/switchboard")).text();
+  assert.match(switchboard, /data-md-script="notes\/switchboard"/);
+  assert.match(switchboard, /aria-label="Explore the Switchboard handoff"/);
+  assert.match(switchboard, /<noscript><ol class="diagram-fallback">/);
   assert.match(project, /class="project-page"/);
   assert.match(project, /Source on GitHub/);
   assert.match(project, /href="\/notes\?topic=Projects"/);

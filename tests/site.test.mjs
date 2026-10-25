@@ -184,5 +184,8 @@ test("static reading pages avoid the full app runtime; interactive pages get the
   assert.match(archive, /aria-label="Notebook"/);
   assert.match(archive, /aria-label="Filter notes by subject"/);
   assert.match(archive, /aria-label="Search notes"/);
-  assert.equal((archive.match(/class="archive-row"/g) || []).length, 6);
+  assert.equal(
+    (archive.match(/class="archive-row"/g) || []).length,
+    readContent().filter((page) => page.path.startsWith("/notes/")).length,
+  );
 });

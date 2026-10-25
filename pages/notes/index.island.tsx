@@ -11,9 +11,7 @@ export default function Notes() {
       <header className="archive-head">
         <div>
           <h1 className="page-title">
-            In the
-            <br />
-            <em>margins.</em>
+            <em>Notes</em>
           </h1>
         </div>
         <p>Project write-ups, notes, and things I’m figuring out.</p>

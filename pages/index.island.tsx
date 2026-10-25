@@ -34,7 +34,7 @@ export default function Home() {
       </section>
       <section aria-labelledby="home-notes-title">
         <div className="section-top">
-          <h2 id="home-notes-title">In the margins</h2>
+          <h2 id="home-notes-title">Notes</h2>
           <a className="text-link" href="/notes">
             All notes <PenArrow />
           </a>

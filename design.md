@@ -22,7 +22,7 @@ Choose the composition around what the visitor came to do.
 | Notebook | Find project write-ups and articles | Searchable, filterable rows with a sketch icon, title, description, subject or project kind, and drawn arrow |
 | Project note | Understand the problem, idea, and experience | Preserve the project layout: clear introduction, metadata, readable prose, diagrams, and a next-project link |
 | Article | Follow an idea comfortably | Reading column, clear subheads, occasional explanatory diagrams and margin notes |
-| About | Meet the person behind the work | Personal introduction, work history, and contact links; the art/code illustration is saved for later reuse |
+| About | Meet the person behind the work | Personal introduction and work history; the art/code illustration is saved for later reuse |
 
 Keep the homepage curated as the collection grows. The archive holds the full collection. A spatial map can be a secondary way to explore relationships; it must not become the only way to find entries or require rearranging the entire site whenever an entry is added.
 

@@ -22,23 +22,6 @@ export default function AboutLayout({ children }: { children: ReactNode }) {
           </div>
           <Experience />
         </section>
-        <section className="about-contact" aria-labelledby="contact">
-          <h2 id="contact">Find me elsewhere</h2>
-          <div className="contact-links">
-            <a className="text-link" href="https://github.com/ryanmiville">
-              GitHub <PenArrow />
-            </a>
-            <a
-              className="text-link"
-              href="https://www.linkedin.com/in/ryan-miville-00160248"
-            >
-              LinkedIn <PenArrow />
-            </a>
-            <a className="text-link" href="mailto:ryanmiville@gmail.com">
-              Email <PenArrow />
-            </a>
-          </div>
-        </section>
       </article>
     </Layout>
   );

@@ -357,8 +357,7 @@ a:active .pen-arrow {
   gap: 24px;
   margin-bottom: 23px;
 }
-.section-top h2,
-.about-contact h2 {
+.section-top h2 {
   font:
     600 2.0625rem/1.1 Caveat,
     cursive;
@@ -1150,20 +1149,6 @@ a:active .pen-arrow {
   flex-shrink: 0;
   font-size: 0.625rem;
   font-variant-numeric: tabular-nums;
-}
-.about-contact {
-  margin: 40px 0 10px;
-  padding-top: 25px;
-  border-top: 1px solid var(--line);
-}
-.contact-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
-  margin-top: 18px;
-}
-.contact-links a {
-  min-height: 44px;
 }
 .work-end {
   margin-top: 30px;
